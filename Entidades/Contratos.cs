@@ -13,7 +13,7 @@ namespace Luis_Baltodano_AP1_P3.Entidades
         [Required(ErrorMessage = "Es obligatorio indicar la fecha de nacimiento")]
         public DateTime Fecha { get; set; } = DateTime.Now;
 
-        public string ClienteId { get; set; }
+        public int ClienteId { get; set; }
 
         [Required(ErrorMessage = "Es obligatorio indicar el comentario")]
         [MinLength(2, ErrorMessage = "El comentario debe tener al menos {0} caractéres")]

@@ -67,6 +67,7 @@
                     <InputNumber class="form-control" @bind-Value="contratos.Monto" />
                     <ValidationMessage For="@(() => contratos.Monto)" />
                 </div>
+                <br>
 
 
                 @* CONTRATO DETALLE *@
@@ -78,22 +79,34 @@
                     <div class="form-row align-items-center">
                         <div class="col">
                             <div class="form-group">
-                                <label style="width: 25%"> <b>Id</b> </label>
+                                <label style="width: 22%"> <b>Id</b> </label>
                                 <label style="width: 20%"><b>ContratoId</b></label>
                                 <label style="width: 20%"><b>ServicioId</b></label>
-                                <label style="width: 20%"><b>Cantidad</b></label>
+                                <label style="width: 15%"><b>Cantidad</b></label>
                                 <label style="width: 20%"><b>Precio</b></label>
 
                                 <div class="input-group">
 
+                                    <InputNumber class="form-control" @bind-Value="Id" />
 
-                                    <InputNumber class="form-control" @bind-Value="Presentacion" />
+                                    <InputNumber class="form-control" @bind-Value="ContratoId" />
+
+
+                                 <InputSelect @bind-Value="ServicioId" class="form-control">
+                                        <option> </option>
+
+                                        @foreach (var item in lista2)
+                                        {
+
+                                            <option value="@item.ServicioId">@item.ServicioId</option>
+                                        }
+                                    </InputSelect> 
 
                                     <InputNumber class="form-control" @bind-Value="Cantidad" />
 
                                     <InputNumber class="form-control" @bind-Value="Precio" />
 
-                                    <InputNumber class="form-control" @bind-Value="ExistenciaEmpaque" />
+
 
                                     <button type="button" class="btn btn-outline-primary btn-lg"
                                         @onclick="AgregarDetalle"> <b>Agregar
@@ -121,12 +134,13 @@
                                 @foreach (var item in contratos.ContratosDetalle)
                                 {
                                     <tr>
+                                         <td>@item.Id</td>
                                         <td>@item.ContratoId</td>
                                         <td>@item.ServicioId</td>
-                                        <td>RD$@item.Precio</td>
                                         <td>@item.Cantidad</td>
-                                        
-                                       
+                                        <td>RD$@item.Precio</td>
+                        
+
                                         <td><span class="btn btn-sm btn-outline-primary oi oi-ban" href="#"
                                             @onclick="@(() => RemoverFila(item))"> Remover</span> </td>
                                     </tr>
@@ -153,26 +167,36 @@
 
 </EditForm>
 @code {
-  
+
+
     [Inject]
     public ContratosBLL contratosBLL { get; set; }
+    [Inject]
+    public ClientesBLL clientesBLL { get; set; }
+    [Inject]
+    public ServiciosBLL serviciosBLL { get; set; }
 
     public Contratos contratos { get; set; } = new Contratos();
     public Servicios servicios { get; set; } = new Servicios();
     public Clientes clientes { get; set; } = new Clientes();
     public List<Clientes> lista { get; set; } = new List<Clientes>();
+  public List<Servicios> lista2 { get; set; } = new List<Servicios>();
 
     protected override void OnInitialized()
     {
+        lista = clientesBLL.GetList(t => true);
+        lista2 = serviciosBLL.GetList(t => true);
         Buscar();
         Nuevo();
     }
     public int ClienteId { get; set; }
+    public int ServicioId { get; set; }
+    public int Id { get; set; }
+    public int ContratoId { get; set; }
 
-    public int Presentacion { get; set; }
     public decimal Cantidad { get; set; }
     public decimal Precio { get; set; }
-    public decimal ExistenciaEmpaque { get; set; }
+
 
     public void Buscar()
     {
@@ -224,9 +248,9 @@
 
     }
 
-     private void AgregarDetalle()
+    private void AgregarDetalle()
     {
-        this.contratos.ContratosDetalle.Add(new ContratosDetalle (Presentacion, Cantidad, Precio));
+        this.contratos.ContratosDetalle.Add(new ContratosDetalle(Id, ContratoId, ServicioId, Cantidad, Precio));
 
     }
 

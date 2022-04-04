@@ -17,9 +17,10 @@ namespace Luis_Baltodano_AP1_P3.Entidades
 
     
 
-        public ContratosDetalle( int servicioId, decimal cantidad, decimal precio)
+        public ContratosDetalle( int id, int contratoId, int servicioId, decimal cantidad, decimal precio)
         {
-         
+            Id = id;
+            ContratoId = contratoId;
             ServicioId = servicioId;
             Cantidad = cantidad;
             Precio = precio;
