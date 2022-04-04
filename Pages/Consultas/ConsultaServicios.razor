@@ -2,7 +2,7 @@
 
 <EditForm Model="lista">
     <DataAnnotationsValidator />
-    
+
 
     <div class="card-header">
         <h3>
@@ -19,11 +19,9 @@
                 <InputSelect class="form-control col-2" @bind-Value="filtro">
                     <option value="0">Todos</option>
                     <option vaue="1">ID</option>
-                    <option value="2">Nombre</option>
-                    <option value="3">Apellido</option>
-                    <option value="4">Direccion</option>
-                    <option value="5">Numero de Cedula</option>
-                    <option value="6">Numero de Telefono</option>
+                    <option value="2">Plan</option>
+                    <option value="3">Precio</option>
+                    <option value="4">Descripcion</option>
                     @* Filtrar por Fecha *@
                 </InputSelect>
 
@@ -40,9 +38,9 @@
             <div class="input-group d-flex align-items-end">
                 @* Fecha *@
                 <div class="form-group " style="width: 30rem;">
-                    <label><b>Fecha de Nacimiento</b></label>
-                    <InputDate class="form-control" @bind-Value="clientes.FechaNacimiento" />
-                    <ValidationMessage For="@(() => clientes.FechaNacimiento)" />
+                    <label><b>Fecha</b></label>
+                    <InputDate class="form-control" @bind-Value="servicios.FechaCreacion" />
+                    <ValidationMessage For="@(() => servicios.FechaCreacion)" />
                 </div>
 
             </div>
@@ -53,12 +51,10 @@
         <thead class="thead-dark">
             <tr class="table-info">
                 <th>ID</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Direccion</th>
-                <th>NumeroCedula</th>
-                <th>NumeroTelefono</th>
-                <th>Fecha</th>
+                <th>Plan</th>
+                <th>Precio</th>
+                <th>Descripcion</th>
+                <th>Fecha de Creacion</th>
                 <th>Ver</th>
             </tr>
         </thead>
@@ -66,13 +62,11 @@
             @foreach (var item in lista)
             {
                 <tr>
-                    <td>@item.ClienteId</td>
-                    <td>@item.Nombre</td>
-                    <td>@item.Apellido</td>
-                    <td>@item.Direccion</td>
-                    <td>@item.NumeroCedula</td>
-                    <td>@item.NumeroTelefono</td>
-                     <td>@item.FechaNacimiento</td>  @* <----Fecha *@
+                    <td>@item.ServicioId</td>
+                    <td>@item.Plan</td>
+                    <td>@item.Precio</td>
+                    <td>@item.Descripcion</td>
+                    <td>@item.FechaCreacion</td> @* <----Fecha *@
                     <td><a class="btn btn-sm btn-outline-primary oi oi-eye" href="RegistroProductos">Ver</a></td>
                 </tr>
             }
@@ -82,7 +76,7 @@
 
     @foreach (var items in lista)
     {
-        contar = items.ClienteId;
+        contar = items.ServicioId;
     }
     <label><b>Total Clientes:</b> @contar</label>
 
@@ -90,16 +84,16 @@
 
 @code {
 
-    public Clientes clientes { get; set; } = new Clientes();
+    public Servicios servicios { get; set; } = new Servicios();
 
     public string filtro { get; set; }
     public string Criterio { get; set; }
     public int contar;
 
-    public List<Clientes> lista { get; set; } = new List<Clientes>();
+    public List<Servicios> lista { get; set; } = new List<Servicios>();
 
     [Inject]
-    public ClientesBLL clientesBLL { get; set; }
+    public ServiciosBLL serviciosBLL { get; set; }
 
     private void Buscar()
     {
@@ -109,22 +103,16 @@
             {
                 case "1":
                     int id = 1;
-                    lista = clientesBLL.GetList(p => p.ClienteId == Convert.ToInt32(id));
+                    lista = serviciosBLL.GetList(p => p.ServicioId == Convert.ToInt32(id));
                     break;
                 case "2":
-                    lista = clientesBLL.GetList(p => p.Nombre.ToLower().Contains(Criterio.ToLower()));
+                    lista = serviciosBLL.GetList(p => p.Plan.ToLower().Contains(Criterio.ToLower()));
                     break;
                 case "3":
-                    lista = clientesBLL.GetList(p => p.Apellido.ToLower().Contains(Criterio.ToLower()));
+                    lista = serviciosBLL.GetList(e => e.Precio == int.Parse(Criterio));
                     break;
                 case "4":
-                    lista = clientesBLL.GetList(p => p.Direccion.ToLower().Contains(Criterio.ToLower()));
-                    break;
-                case "5":
-                    lista = clientesBLL.GetList(p => p.NumeroCedula.ToLower().Contains(Criterio.ToLower()));
-                    break;
-                case "6":
-                    lista = clientesBLL.GetList(p => p.NumeroTelefono.ToLower().Contains(Criterio.ToLower()));
+                    lista = serviciosBLL.GetList(p => p.Descripcion.ToLower().Contains(Criterio.ToLower()));
                     break;
 
                     /* case "7":
@@ -136,7 +124,7 @@
 
         else
         {
-            lista = clientesBLL.GetList(p => true);
+            lista = serviciosBLL.GetList(p => true);
         }
     }
 

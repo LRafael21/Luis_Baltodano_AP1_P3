@@ -108,10 +108,10 @@ namespace Luis_Baltodano_AP1_P3.BLLServicios
             bool paso = false;
             try
             {
-                var servicios = __contexto.Clientes.Find(servicioId);
+                var servicios = __contexto.Servicios.Find(servicioId);
                 if(servicios != null)
                 {
-                    __contexto.Clientes.Remove(servicios);
+                    __contexto.Servicios.Remove(servicios);
                     paso = __contexto.SaveChanges() > 0;
                 }
             }

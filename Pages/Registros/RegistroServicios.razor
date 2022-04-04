@@ -16,7 +16,7 @@
                 <h3>
                     <center> <b>Registro de Servicios </b></center>
                 </h3>
-
+                @* Fecha *@
                 <div class="form-group col">
                     <label><b>Fecha </b></label>
                     <InputDate class="form-control" @bind-Value="servicios.FechaCreacion" />
@@ -36,8 +36,8 @@
                             </div>
                         </div>
 
-                        @* Contrato Id *@
-                       <div class="form-group col">
+                    
+                        <div class="form-group col">
                             <label><b> ClienteId</b></label>
                             <InputSelect @bind-Value="ClienteId" class="form-control">
                                 <option> </option>
@@ -49,10 +49,10 @@
                                 }
                             </InputSelect>
 
-                        </div> 
+                        </div>
 
 
-                        @* Fecha *@
+
 
 
                         @* Boton Buscar *@
@@ -70,15 +70,15 @@
                         <label><b>Plan</b></label>
                         <InputSelect class="form-control col-3 " style="width: 30%" @bind-Value="servicios.Plan">
                             <option>Elegir Producto</option>
-                            <option >Internet (5Mbps - 1Mbps) - Cable (120 Canales)</option>
-                            <option >Internet (10Mbps - 5Mbps) - Cable (150 Canales)</option>
-                            <option >Internet (100Mbps - 50Mbps) - Cable (300 Canales)</option>
-                            <option >Internet (5Mbps - 1Mbps)</option>
-                            <option >Internet (10Mbps - 5Mbps)</option>
+                            <option>Internet (5Mbps - 1Mbps) - Cable (120 Canales)</option>
+                            <option>Internet (10Mbps - 5Mbps) - Cable (150 Canales)</option>
+                            <option>Internet (100Mbps - 50Mbps) - Cable (300 Canales)</option>
+                            <option>Internet (5Mbps - 1Mbps)</option>
+                            <option>Internet (10Mbps - 5Mbps)</option>
                             <option>Internet (100Mbps - 50Mbps)</option>
-                            <option >Cable (120 Canales)</option>
+                            <option>Cable (120 Canales)</option>
                             <option> Cable (150 Canales)</option>
-                            <option >Cable (300 Canales)</option>
+                            <option>Cable (300 Canales)</option>
                         </InputSelect>
                     </div>
 
@@ -135,19 +135,19 @@
 
     public Servicios servicios { get; set; } = new Servicios();
     public Clientes clientes { get; set; } = new Clientes();
- public List<Clientes> lista { get; set; } = new List<Clientes>();
+    public List<Clientes> lista { get; set; } = new List<Clientes>();
 
     protected override void OnInitialized()
     {
         servicios.ServicioId = ServicioId;
-       lista = clientesBLL.GetList(t => true);
+        lista = clientesBLL.GetList(t => true);
         Buscar();
         Nuevo();
     }
 
 
     public int ClienteId { get; set; }
-//public string filtro { get; set; }
+    //public string filtro { get; set; }
 
 
     public void Buscar()

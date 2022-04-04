@@ -1,0 +1,238 @@
+@page "/RegistroContratos"
+
+@inject IToastService toastService
+
+<EditForm Model="contratos" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <PageTitle>Registro de Contratos</PageTitle>
+
+    <div class="container">
+
+        <div class="card-header">
+            <h3>
+                <center> <b> Registro de Contratos</b> </center>
+            </h3>
+        </div>
+
+        <div class="card-body">
+
+            <div class="form-row align-items-center">
+                <div class="col">
+                    <div class="form-group">
+                        <label><b>Contrato Id</b></label>
+                        <div class="input-group">
+                            <InputNumber @bind-Value="contratos.ContratoId" class="form-control col-4" />
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-warning" @onclick="Buscar">
+                                    <i class="oi oi-magnifying-glass mr-2" /> <b> Buscar</b>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                @* Fecha *@
+                <div class="form-group col">
+                    <label><b>Fecha </b></label>
+                    <InputDate class="form-control" @bind-Value="contratos.Fecha" />
+                    <ValidationMessage For="@(() => contratos.Fecha)" />
+                </div>
+
+                <div class="form-group col">
+                    <label><b> ClienteId</b></label>
+                    <InputSelect @bind-Value="ClienteId" class="form-control">
+                        <option> </option>
+
+                        @foreach (var item in lista)
+                        {
+
+                            <option value="@item.ClienteId">@item.ClienteId</option>
+                        }
+                    </InputSelect>
+
+                </div>
+
+                @* Comentarios *@
+                <div class="form-group">
+                    <label><b>Comentarios</b></label>
+                    <InputText class="form-control" @bind-Value="contratos.Comentarios" />
+                    <ValidationMessage For="@(() => contratos.Comentarios)" />
+                </div>
+
+
+                <div clas="form-group">
+
+                    <label><b>Monto</b></label>
+                    <InputNumber class="form-control" @bind-Value="contratos.Monto" />
+                    <ValidationMessage For="@(() => contratos.Monto)" />
+                </div>
+
+
+                @* CONTRATO DETALLE *@
+                <div class="card align-items-center">
+                    <div class="card-header">
+                        <h3><b>Detalle del Contrato</b></h3>
+                    </div>
+
+                    <div class="form-row align-items-center">
+                        <div class="col">
+                            <div class="form-group">
+                                <label style="width: 25%"> <b>Id</b> </label>
+                                <label style="width: 20%"><b>ContratoId</b></label>
+                                <label style="width: 20%"><b>ServicioId</b></label>
+                                <label style="width: 20%"><b>Cantidad</b></label>
+                                <label style="width: 20%"><b>Precio</b></label>
+
+                                <div class="input-group">
+
+
+                                    <InputNumber class="form-control" @bind-Value="Presentacion" />
+
+                                    <InputNumber class="form-control" @bind-Value="Cantidad" />
+
+                                    <InputNumber class="form-control" @bind-Value="Precio" />
+
+                                    <InputNumber class="form-control" @bind-Value="ExistenciaEmpaque" />
+
+                                    <button type="button" class="btn btn-outline-primary btn-lg"
+                                        @onclick="AgregarDetalle"> <b>Agregar
+                                            Detalle </b></button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        @* Tabla de productos *@
+                        <table class="table table-success table-striped">
+                            <thead class="thead-dark">
+                                <tr class="table-info">
+                                    <th>Id</th>
+                                    <th>ContratoId</th>
+                                    <th>ServicioId</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio</th>
+                                    <th>Remover</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var item in contratos.ContratosDetalle)
+                                {
+                                    <tr>
+                                        <td>@item.ContratoId</td>
+                                        <td>@item.ServicioId</td>
+                                        <td>RD$@item.Precio</td>
+                                        <td>@item.Cantidad</td>
+                                        
+                                       
+                                        <td><span class="btn btn-sm btn-outline-primary oi oi-ban" href="#"
+                                            @onclick="@(() => RemoverFila(item))"> Remover</span> </td>
+                                    </tr>
+                                }
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+
+
+                @* Botones *@
+
+                <div class="card-footer">
+                    <div class="form-group text-center" display: inline-block>
+                        <button type="button" class="btn btn-lg btn-primary" @onclick="Nuevo">Nuevo</button>
+                        <button type="submit" class="btn btn-lg btn-success">Guardar</button>
+                        <button type="button" class="btn btn-lg btn-danger" @onclick="Eliminar">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</EditForm>
+@code {
+  
+    [Inject]
+    public ContratosBLL contratosBLL { get; set; }
+
+    public Contratos contratos { get; set; } = new Contratos();
+    public Servicios servicios { get; set; } = new Servicios();
+    public Clientes clientes { get; set; } = new Clientes();
+    public List<Clientes> lista { get; set; } = new List<Clientes>();
+
+    protected override void OnInitialized()
+    {
+        Buscar();
+        Nuevo();
+    }
+    public int ClienteId { get; set; }
+
+    public int Presentacion { get; set; }
+    public decimal Cantidad { get; set; }
+    public decimal Precio { get; set; }
+    public decimal ExistenciaEmpaque { get; set; }
+
+    public void Buscar()
+    {
+        if (this.contratos.ContratoId > 0)
+        {
+            Contratos encontrado = contratosBLL.Buscar(this.contratos.ContratoId);
+            if (encontrado != null)
+            {
+                this.contratos = encontrado;
+                toastService.ShowSuccess("Contrato encontrado.");
+            }
+            else
+            {
+                toastService.ShowError("No se encontro el cliente");
+            }
+        }
+
+    }
+    public void Nuevo()
+    {
+        contratos = new Contratos();
+    }
+
+
+
+    public void Guardar()
+    {
+
+        if (contratosBLL.Guardar(contratos))
+        {
+            toastService.ShowInfo("Contratos guardado exitosamente.");
+        }
+        else
+            toastService.ShowError("No se pudo guardar el contratos.");
+    }
+    public void Eliminar()
+    {
+        bool eliminado;
+        eliminado = contratosBLL.Eliminar(contratos.ContratoId);
+        if (eliminado)
+        {
+            Nuevo();
+            toastService.ShowSuccess("Eliminacion exitosa");
+        }
+        else
+        {
+            toastService.ShowError("Eliminacion fallida");
+        }
+
+    }
+
+     private void AgregarDetalle()
+    {
+        this.contratos.ContratosDetalle.Add(new ContratosDetalle (Presentacion, Cantidad, Precio));
+
+    }
+
+    private void RemoverFila(ContratosDetalle item)
+    {
+        this.contratos.ContratosDetalle.Remove(item);
+    }
+
+}
