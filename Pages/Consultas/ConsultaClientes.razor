@@ -1,0 +1,144 @@
+@page "/ConsultaClientes"
+
+<EditForm Model="lista">
+    <DataAnnotationsValidator />
+    
+
+    <div class="card-header">
+        <h3>
+            <center> <b>Consulta de Productos</b></center>
+        </h3>
+    </div>
+
+    <div class="card-body">
+
+        <form>
+
+            <div class="input-group d-flex align-items-end">
+
+                <InputSelect class="form-control col-2" @bind-Value="filtro">
+                    <option value="0">Todos</option>
+                    <option vaue="1">ID</option>
+                    <option value="2">Nombre</option>
+                    <option value="3">Apellido</option>
+                    <option value="4">Direccion</option>
+                    <option value="5">Numero de Cedula</option>
+                    <option value="6">Numero de Telefono</option>
+                    @* Filtrar por Fecha *@
+                </InputSelect>
+
+                <div class="flex-fill mx-2">
+                    <label>Critero</label>
+                    <input type="text" class="form-control" @bind-value="Criterio" />
+                </div>
+
+                <button type="button" class="btn btn-warning" @onclick="Buscar">
+                    <i class="oi oi-magnifying-glass mr-2" /> <b>Buscar</b>
+                </button>
+            </div>
+
+            <div class="input-group d-flex align-items-end">
+                @* Fecha *@
+                <div class="form-group " style="width: 30rem;">
+                    <label><b>Fecha de Nacimiento</b></label>
+                    <InputDate class="form-control" @bind-Value="clientes.FechaNacimiento" />
+                    <ValidationMessage For="@(() => clientes.FechaNacimiento)" />
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+    <table class="table table-success table-striped">
+        <thead class="thead-dark">
+            <tr class="table-info">
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Direccion</th>
+                <th>NumeroCedula</th>
+                <th>NumeroTelefono</th>
+                <th>Fecha</th>
+                <th>Ver</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in lista)
+            {
+                <tr>
+                    <td>@item.ClienteId</td>
+                    <td>@item.Nombre</td>
+                    <td>@item.Apellido</td>
+                    <td>@item.Direccion</td>
+                    <td>@item.NumeroCedula</td>
+                    <td>@item.NumeroTelefono</td>
+                     <td>@item.FechaNacimiento</td>  @* <----Fecha *@
+                    <td><a class="btn btn-sm btn-outline-primary oi oi-eye" href="RegistroProductos">Ver</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+    @foreach (var items in lista)
+    {
+        contar = items.ClienteId;
+    }
+    <label><b>Total Clientes:</b> @contar</label>
+
+</EditForm>
+
+@code {
+
+    public Clientes clientes { get; set; } = new Clientes();
+
+    public string filtro { get; set; }
+    public string Criterio { get; set; }
+    public int contar;
+
+    public List<Clientes> lista { get; set; } = new List<Clientes>();
+
+    [Inject]
+    public ClientesBLL clientesBLL { get; set; }
+
+    private void Buscar()
+    {
+        if (Criterio != null)
+        {
+            switch (filtro)
+            {
+                case "1":
+                    int id = 1;
+                    lista = clientesBLL.GetList(p => p.ClienteId == Convert.ToInt32(id));
+                    break;
+                case "2":
+                    lista = clientesBLL.GetList(p => p.Nombre.ToLower().Contains(Criterio.ToLower()));
+                    break;
+                case "3":
+                    lista = clientesBLL.GetList(p => p.Apellido.ToLower().Contains(Criterio.ToLower()));
+                    break;
+                case "4":
+                    lista = clientesBLL.GetList(p => p.Direccion.ToLower().Contains(Criterio.ToLower()));
+                    break;
+                case "5":
+                    lista = clientesBLL.GetList(p => p.NumeroCedula.ToLower().Contains(Criterio.ToLower()));
+                    break;
+                case "6":
+                    lista = clientesBLL.GetList(p => p.NumeroTelefono.ToLower().Contains(Criterio.ToLower()));
+                    break;
+
+                    /* case "7":
+                    lista = productosBLL.GetList(e => e.Ganancia == int.Parse(Criterio));
+                    break;*/
+
+            }
+        }
+
+        else
+        {
+            lista = clientesBLL.GetList(p => true);
+        }
+    }
+
+
+}

@@ -1,0 +1,203 @@
+@page "/RegistroServicios"
+@page "/RegistroServicios/{ServicioId:int}"
+
+@inject IToastService toastService
+
+<EditForm Model="servicios" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <PageTitle>Registro de Servicios</PageTitle>
+
+    <div class="container">
+
+        <div class="card">
+
+            <div class="card-header">
+                <div class="input-group d-flex align-items-end"></div>
+                <h3>
+                    <center> <b>Registro de Servicios </b></center>
+                </h3>
+
+                <div class="form-group col">
+                    <label><b>Fecha </b></label>
+                    <InputDate class="form-control" @bind-Value="servicios.FechaCreacion" />
+                    <ValidationMessage For="@(() => servicios.FechaCreacion)" />
+                </div>
+            </div>
+
+            <div class="card-body">
+
+                <div class="form-row align-items-center">
+
+                    <div class="input-group d-flex align-items-end">
+                        <div class="form-group col">
+                            <label><b>Servicio Id</b></label>
+                            <div class="input-group">
+                                <InputNumber @bind-Value="servicios.ServicioId" class="form-control col-4" />
+                            </div>
+                        </div>
+
+                        @* Contrato Id *@
+                       <div class="form-group col">
+                            <label><b> ClienteId</b></label>
+                            <InputSelect @bind-Value="ClienteId" class="form-control">
+                                <option> </option>
+
+                                @foreach (var item in lista)
+                                {
+
+                                    <option value="@item.ClienteId">@item.ClienteId</option>
+                                }
+                            </InputSelect>
+
+                        </div> 
+
+
+                        @* Fecha *@
+
+
+                        @* Boton Buscar *@
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-warning" @onclick="Buscar">
+                                <i class="oi oi-magnifying-glass mr-2" /> <b> Buscar</b>
+                            </button>
+                        </div>
+
+                    </div>
+
+                    @* Plan *@
+                    <div clas="form-group">
+
+                        <label><b>Plan</b></label>
+                        <InputSelect class="form-control col-3 " style="width: 30%" @bind-Value="servicios.Plan">
+                            <option>Elegir Producto</option>
+                            <option >Internet (5Mbps - 1Mbps) - Cable (120 Canales)</option>
+                            <option >Internet (10Mbps - 5Mbps) - Cable (150 Canales)</option>
+                            <option >Internet (100Mbps - 50Mbps) - Cable (300 Canales)</option>
+                            <option >Internet (5Mbps - 1Mbps)</option>
+                            <option >Internet (10Mbps - 5Mbps)</option>
+                            <option>Internet (100Mbps - 50Mbps)</option>
+                            <option >Cable (120 Canales)</option>
+                            <option> Cable (150 Canales)</option>
+                            <option >Cable (300 Canales)</option>
+                        </InputSelect>
+                    </div>
+
+                    <div clas="form-group">
+
+                        <label><b>Precio</b></label>
+                        <InputNumber class="form-control" @bind-Value="servicios.Precio" />
+                        <ValidationMessage For="@(() => servicios.Precio)" />
+                    </div>
+
+                    @* Descripcion *@
+                    <div clas="form-group">
+
+                        <label><b>Descripcion</b></label>
+                        <InputText class="form-control" @bind-Value="servicios.Descripcion" />
+                        <ValidationMessage For="@(() => servicios.Descripcion)" />
+                    </div>
+
+                    <br>
+                    <div class="card-footer">
+                        <div class="form-group text-center" display: inline-block>
+                            <button type="button" class="btn btn-lg btn-primary" @onclick="Nuevo">Nuevo</button>
+                            <button type="submit" class="btn btn-lg btn-success">Guardar</button>
+                            <button type="button" class="btn btn-lg btn-danger" @onclick="Eliminar">Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+</EditForm>
+
+
+
+
+
+
+
+@code {
+    [Parameter]
+    public int ServicioId { get; set; }
+
+    [Inject]
+    public ServiciosBLL serviciosBLL { get; set; }
+
+    [Inject]
+    public ClientesBLL clientesBLL { get; set; }
+
+    public Servicios servicios { get; set; } = new Servicios();
+    public Clientes clientes { get; set; } = new Clientes();
+ public List<Clientes> lista { get; set; } = new List<Clientes>();
+
+    protected override void OnInitialized()
+    {
+        servicios.ServicioId = ServicioId;
+       lista = clientesBLL.GetList(t => true);
+        Buscar();
+        Nuevo();
+    }
+
+
+    public int ClienteId { get; set; }
+//public string filtro { get; set; }
+
+
+    public void Buscar()
+    {
+        if (this.servicios.ServicioId > 0)
+        {
+            Servicios encontrado = serviciosBLL.Buscar(this.servicios.ServicioId);
+            if (encontrado != null)
+            {
+                this.servicios = encontrado;
+                toastService.ShowSuccess("Servicio encontrado.");
+            }
+            else
+            {
+                toastService.ShowError("No se encontro el Servicio");
+            }
+        }
+
+    }
+    public void Nuevo()
+    {
+        servicios = new Servicios();
+    }
+
+
+
+    public void Guardar()
+    {
+
+        if (serviciosBLL.Guardar(servicios))
+        {
+            toastService.ShowInfo("Servicio guardado exitosamente.");
+        }
+        else
+            toastService.ShowError("No se pudo guardar el servicio.");
+    }
+    public void Eliminar()
+    {
+        bool eliminado;
+        eliminado = serviciosBLL.Eliminar(servicios.ServicioId);
+        if (eliminado)
+        {
+            Nuevo();
+            toastService.ShowSuccess("Eliminacion exitosa");
+        }
+        else
+        {
+            toastService.ShowError("Eliminacion fallida");
+        }
+
+    }
+
+}

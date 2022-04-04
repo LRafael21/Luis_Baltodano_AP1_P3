@@ -1,0 +1,160 @@
+﻿@page "/RegistroClientes"
+@page "/RegistroClientes/{ClienteId:int}"
+
+@inject IToastService toastService
+
+<EditForm Model="clientes" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <PageTitle>Registro de Clientes</PageTitle>
+
+    <div class="container">
+
+        <div class="card-header">
+            <h3>
+                <center> <b> Registro de Clientes</b> </center>
+            </h3>
+        </div>
+
+        <div class="card-body">
+
+            <div class="form-row align-items-center">
+                <div class="col">
+                    <div class="form-group">
+                        <label><b>Cliente Id</b></label>
+                        <div class="input-group">
+                            <InputNumber @bind-Value="clientes.ClienteId" class="form-control col-4" />
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-warning" @onclick="Buscar">
+                                    <i class="oi oi-magnifying-glass mr-2" /> <b> Buscar</b>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                @* Nombre *@
+                <div class="form-group">
+                    <label><b>Nombre</b></label>
+                    <InputText class="form-control" @bind-Value="clientes.Nombre" />
+                    <ValidationMessage For="@(() => clientes.Nombre)" />
+                </div>
+
+                @* Apellido *@
+                <div class="form-group">
+                    <label><b>Apellido</b></label>
+                    <InputText class="form-control" @bind-Value="clientes.Apellido" />
+                    <ValidationMessage For="@(() => clientes.Apellido)" />
+                </div>
+
+                @* Direccion *@
+                <div class="form-group">
+                    <label><b>Direccion</b></label>
+                    <InputText class="form-control" @bind-Value="clientes.Direccion" />
+                    <ValidationMessage For="@(() => clientes.Direccion)" />
+                </div>
+
+                @*Numero de Cedula *@
+                <div class="form-group">
+                    <label><b>Numero de Cedula</b></label>
+                    <InputText class="form-control" @bind-Value="clientes.NumeroCedula" />
+                    <ValidationMessage For="@(() => clientes.NumeroCedula)" />
+                </div>
+
+
+                @* Numero de Telefono *@
+                <div class="form-group">
+                    <label><b>Numero de Telefono</b></label>
+                    <InputText class="form-control" @bind-Value="clientes.NumeroTelefono" />
+                    <ValidationMessage For="(() => clientes.NumeroTelefono)" />
+                </div>
+
+                @* Fecha Nacimiento *@
+                <div class="form-group">
+                    <label><b>Fecha de Nacimiento</b></label>
+                    <InputDate class="form-control" @bind-Value="clientes.FechaNacimiento" />
+                    @* ValidationMessage *@
+                </div>
+
+
+                @* Botones *@
+
+                <div class="card-footer">
+                    <div class="form-group text-center" display: inline-block>
+                        <button type="button" class="btn btn-lg btn-primary" @onclick="Nuevo">Nuevo</button>
+                        <button type="submit" class="btn btn-lg btn-success">Guardar</button>
+                        <button type="button" class="btn btn-lg btn-danger" @onclick="Eliminar">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</EditForm>
+@code {
+    [Parameter]
+    public int ClienteId { get; set; }
+
+    [Inject]
+    public ClientesBLL clientesBLL { get; set; }
+
+    public Clientes clientes { get; set; } = new Clientes();
+
+    protected override void OnInitialized()
+    {
+        clientes.ClienteId = ClienteId;
+        Buscar();
+        Nuevo();
+    }
+
+    public void Buscar()
+    {
+        if (this.clientes.ClienteId > 0)
+        {
+            Clientes encontrado = clientesBLL.Buscar(this.clientes.ClienteId);
+            if (encontrado != null)
+            {
+                this.clientes = encontrado;
+                toastService.ShowSuccess("Cliente encontrado.");
+            }
+            else
+            {
+                toastService.ShowError("No se encontro el cliente");
+            }
+        }
+
+    }
+    public void Nuevo()
+    {
+        clientes = new Clientes();
+    }
+
+
+
+    public void Guardar()
+    {
+       
+        if (clientesBLL.Guardar(clientes))
+        {
+            toastService.ShowInfo("Cliente guardado exitosamente.");
+        }
+        else
+            toastService.ShowError("No se pudo guardar el cliente.");
+    }
+    public void Eliminar()
+    {
+        bool eliminado;
+        eliminado = clientesBLL.Eliminar(clientes.ClienteId);
+        if (eliminado)
+        {
+            Nuevo();
+            toastService.ShowSuccess("Eliminacion exitosa");
+        }
+        else
+        {
+            toastService.ShowError("Eliminacion fallida");
+        }
+
+    }
+
+}
