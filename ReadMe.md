@@ -1,0 +1,1 @@
+Este es el proyecto final de Programacion Aplicada 1, donde estaré haciendo 2 registros normales, 1 registro con detalle y una consulta por cada registro. Este proyecto es un poco inspirado en el sistema de telenord. el cual fue mi proyecto de Analisis de Sistemas y Diseño de Sistemas
