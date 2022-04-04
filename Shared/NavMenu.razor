@@ -1,5 +1,5 @@
 ﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
+    <div class="container-fluid nav-tabs">
         <a class="navbar-brand" href="">Luis_Baltodano_AP1_P3</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
@@ -9,41 +9,50 @@
 
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <nav class="flex-column">
-     
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="index">
+                <span class="oi oi-plus" aria-hidden="true"></span> Inicio
+            </NavLink>
+        </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="RegistroClientes">
                 <span class="oi oi-plus" aria-hidden="true"></span> Registro Clientes
             </NavLink>
         </div>
 
-           <div class="nav-item px-3">
+        <div class="nav-item px-3">
             <NavLink class="nav-link" href="RegistroServicios">
                 <span class="oi oi-plus" aria-hidden="true"></span> Registro Servicios
             </NavLink>
         </div>
 
-
-         <div class="nav-item px-3">
+        <div class="nav-item px-3">
             <NavLink class="nav-link" href="RegistroContratos">
                 <span class="oi oi-plus" aria-hidden="true"></span> Registro Contratos
             </NavLink>
         </div>
 
 
-
-          <div class="nav-item px-3">
+        <div class="nav-item px-3">
             <NavLink class="nav-link" href="ConsultaClientes">
-                <span class="oi oi-plus" aria-hidden="true"></span> Consulta Clientes
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Consulta Clientes
             </NavLink>
         </div>
 
-         <div class="nav-item px-3">
+        <div class="nav-item px-3">
             <NavLink class="nav-link" href="ConsultaServicios">
-                <span class="oi oi-plus" aria-hidden="true"></span> Consulta Servicios
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Consulta Servicios
             </NavLink>
         </div>
 
-       
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="ConsultaContratos">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Consulta Contratos
+            </NavLink>
+        </div>
+
+
     </nav>
 </div>
 

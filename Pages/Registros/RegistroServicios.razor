@@ -39,19 +39,18 @@
                     
                         <div class="form-group col">
                             <label><b> ClienteId</b></label>
-                            <InputSelect @bind-Value="ClienteId" class="form-control">
-                                <option> </option>
+                               <InputSelect class="form-select " @bind-Value="ClienteId">
+                               
 
                                 @foreach (var item in lista)
                                 {
+                                 
 
                                     <option value="@item.ClienteId">@item.ClienteId</option>
                                 }
                             </InputSelect>
 
                         </div>
-
-
 
 
 
@@ -68,7 +67,7 @@
                     <div clas="form-group">
 
                         <label><b>Plan</b></label>
-                        <InputSelect class="form-control col-3 " style="width: 30%" @bind-Value="servicios.Plan">
+                        <InputSelect class="form-select " style="width: 30%" @bind-Value="servicios.Plan">
                             <option>Elegir Producto</option>
                             <option>Internet (5Mbps - 1Mbps) - Cable (120 Canales)</option>
                             <option>Internet (10Mbps - 5Mbps) - Cable (150 Canales)</option>
@@ -85,7 +84,7 @@
                     <div clas="form-group">
 
                         <label><b>Precio</b></label>
-                        <InputNumber class="form-control" @bind-Value="servicios.Precio" />
+                        <InputNumber class="form-control" @bind-Value="servicios.Precio" placeholder="Ejemplo: 500" />
                         <ValidationMessage For="@(() => servicios.Precio)" />
                     </div>
 
@@ -94,7 +93,7 @@
 
                         <label><b>Descripcion</b></label>
                         <InputText class="form-control" @bind-Value="servicios.Descripcion" />
-                        <ValidationMessage For="@(() => servicios.Descripcion)" />
+                        <ValidationMessage For="@(() => servicios.Descripcion)" placeholder="Ejemplo: Ingrese Descripcion" />
                     </div>
 
                     <br>
@@ -114,11 +113,7 @@
 
 
 
-
 </EditForm>
-
-
-
 
 
 

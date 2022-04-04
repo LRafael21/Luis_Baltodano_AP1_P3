@@ -1,5 +1,6 @@
 @page "/RegistroContratos"
 
+
 @inject IToastService toastService
 
 <EditForm Model="contratos" OnValidSubmit="Guardar">
@@ -41,7 +42,7 @@
 
                 <div class="form-group col">
                     <label><b> ClienteId</b></label>
-                    <InputSelect @bind-Value="ClienteId" class="form-control">
+                    <InputSelect @bind-Value="ClienteId" class="form-select ">
                         <option> </option>
 
                         @foreach (var item in lista)
@@ -56,7 +57,8 @@
                 @* Comentarios *@
                 <div class="form-group">
                     <label><b>Comentarios</b></label>
-                    <InputText class="form-control" @bind-Value="contratos.Comentarios" />
+                    <InputText class="form-control" @bind-Value="contratos.Comentarios"
+                        placeholder="Ingresar Comentario" />
                     <ValidationMessage For="@(() => contratos.Comentarios)" />
                 </div>
 
@@ -64,7 +66,8 @@
                 <div clas="form-group">
 
                     <label><b>Monto</b></label>
-                    <InputNumber class="form-control" @bind-Value="contratos.Monto" />
+                    <InputNumber class="form-control" @bind-Value="contratos.Monto"
+                        placeholder="Ejemplo: 40243114007" />
                     <ValidationMessage For="@(() => contratos.Monto)" />
                 </div>
                 <br>
@@ -79,20 +82,20 @@
                     <div class="form-row align-items-center">
                         <div class="col">
                             <div class="form-group">
-                                <label style="width: 22%"> <b>Id</b> </label>
+                                <label style="width: 18%"> <b>Id</b> </label>
                                 <label style="width: 20%"><b>ContratoId</b></label>
-                                <label style="width: 20%"><b>ServicioId</b></label>
-                                <label style="width: 15%"><b>Cantidad</b></label>
-                                <label style="width: 20%"><b>Precio</b></label>
+                                <label style="width: 13%"><b>ServicioId</b></label>
+                                <label style="width: 16%"><b>Cantidad</b></label>
+                                <label style="width: 15%"><b>Precio</b></label>
 
                                 <div class="input-group">
 
-                                    <InputNumber class="form-control" @bind-Value="Id" />
+                                    <InputNumber readonly class="form-control" @bind-Value="Id" />
 
-                                    <InputNumber class="form-control" @bind-Value="ContratoId" />
+                                    <InputNumber readonly class="form-control" @bind-Value="ContratoId" />
 
 
-                                 <InputSelect @bind-Value="ServicioId" class="form-control">
+                                    <InputSelect @bind-Value="ServicioId" class="form-control">
                                         <option> </option>
 
                                         @foreach (var item in lista2)
@@ -100,7 +103,7 @@
 
                                             <option value="@item.ServicioId">@item.ServicioId</option>
                                         }
-                                    </InputSelect> 
+                                    </InputSelect>
 
                                     <InputNumber class="form-control" @bind-Value="Cantidad" />
 
@@ -134,12 +137,12 @@
                                 @foreach (var item in contratos.ContratosDetalle)
                                 {
                                     <tr>
-                                         <td>@item.Id</td>
+                                        <td>@item.Id</td>
                                         <td>@item.ContratoId</td>
                                         <td>@item.ServicioId</td>
                                         <td>@item.Cantidad</td>
                                         <td>RD$@item.Precio</td>
-                        
+
 
                                         <td><span class="btn btn-sm btn-outline-primary oi oi-ban" href="#"
                                             @onclick="@(() => RemoverFila(item))"> Remover</span> </td>
@@ -169,6 +172,7 @@
 @code {
 
 
+
     [Inject]
     public ContratosBLL contratosBLL { get; set; }
     [Inject]
@@ -178,12 +182,15 @@
 
     public Contratos contratos { get; set; } = new Contratos();
     public Servicios servicios { get; set; } = new Servicios();
+    public ContratosDetalle contratosDetalle { get; set; } = new ContratosDetalle();
     public Clientes clientes { get; set; } = new Clientes();
     public List<Clientes> lista { get; set; } = new List<Clientes>();
-  public List<Servicios> lista2 { get; set; } = new List<Servicios>();
+
+    public List<Servicios> lista2 { get; set; } = new List<Servicios>();
 
     protected override void OnInitialized()
     {
+        contratos.ContratoId = ContratoId;
         lista = clientesBLL.GetList(t => true);
         lista2 = serviciosBLL.GetList(t => true);
         Buscar();
@@ -250,7 +257,7 @@
 
     private void AgregarDetalle()
     {
-        this.contratos.ContratosDetalle.Add(new ContratosDetalle(Id, ContratoId, ServicioId, Cantidad, Precio));
+        this.contratos.ContratosDetalle.Add(new ContratosDetalle(Id, contratos.ContratoId, ServicioId, Cantidad, Precio));
 
     }
 
