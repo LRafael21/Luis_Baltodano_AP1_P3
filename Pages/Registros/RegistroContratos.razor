@@ -42,7 +42,7 @@
 
                 <div class="form-group col">
                     <label><b> ClienteId</b></label>
-                    <InputSelect @bind-Value="ClienteId"  class="form-select ">
+                    <InputSelect @bind-Value="ClienteId" class="form-select ">
                         <option value="0" disabled selected> Seleccione un Cliente</option>
 
                         @foreach (var item in lista)
@@ -62,14 +62,6 @@
                     <ValidationMessage For="@(() => contratos.Comentarios)" />
                 </div>
 
-
-                <div clas="form-group">
-
-                    <label><b>Monto</b></label>
-                    <InputNumber class="form-control" @bind-Value="contratos.Monto"
-                        placeholder="Ejemplo: 40243114007" />
-                    <ValidationMessage For="@(() => contratos.Monto)" />
-                </div>
                 <br>
 
 
@@ -134,7 +126,7 @@
                                 @foreach (var item in servicios.ContratosDetalle)
 
                                 {
-                                    
+
                                     <tr>
                                         <td>@item.ServicioId</td>
                                         <td>@item.Plan</td>
@@ -149,15 +141,15 @@
                                 <br>
 
 
-
-
                             </tbody>
 
                             @foreach (var items in servicios.ContratosDetalle)
                             {
-                                contar = items.Importe;
+                                contratos.Monto = items.Importe;
                             }
-                            <label><b>Total:</b> @contar</label>
+                            <label><b>Monto Total:</b></label>
+                            <InputNumber readonly class="form-control" @bind-Value="contratos.Monto" />
+                            <ValidationMessage For="@(() => contratos.Monto)" />
                         </table>
                     </div>
                 </div>
@@ -287,23 +279,23 @@
 
     }
 
-   /* private void AgregarDetalle()
+    /* private void AgregarDetalle()
     {
-        this.servicios.ContratosDetalle.Add(new ContratosDetalle(ServicioId,Plan, Cantidad, Precio, Importe));
+    this.servicios.ContratosDetalle.Add(new ContratosDetalle(ServicioId,Plan, Cantidad, Precio, Importe));
 
     }*/
 
-     private void AgregarDetalle()
+    private void AgregarDetalle()
     {
         Servicios ADDServicios = serviciosBLL.Buscar(SeleccionaServicio);
 
         this.servicios.ContratosDetalle.Add(new ContratosDetalle(
 
-            ServicioId = SeleccionaServicio,
-            Plan = ADDServicios.Plan ,
-            Cantidad, Precio, Importe
-            
-            ));
+        ServicioId = SeleccionaServicio,
+        Plan = ADDServicios.Plan,
+        Cantidad, Precio, Importe
+
+        ));
 
     }
 
