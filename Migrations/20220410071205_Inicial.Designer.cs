@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Luis_Baltodano_AP1_P3.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20220410051458_Inicial")]
+    [Migration("20220410071205_Inicial")]
     partial class Inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -86,17 +86,13 @@ namespace Luis_Baltodano_AP1_P3.Migrations
             modelBuilder.Entity("Luis_Baltodano_AP1_P3.Entidades.ContratosDetalle", b =>
                 {
                     b.Property<int>("ServicioId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<decimal>("Cantidad")
-                        .HasColumnType("TEXT");
+                    b.Property<float>("Cantidad")
+                        .HasColumnType("REAL");
 
-                    b.Property<int?>("ContratoId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<decimal>("Importe")
-                        .HasColumnType("TEXT");
+                    b.Property<float>("Importe")
+                        .HasColumnType("REAL");
 
                     b.Property<string>("Plan")
                         .IsRequired()
@@ -106,8 +102,6 @@ namespace Luis_Baltodano_AP1_P3.Migrations
                         .HasColumnType("REAL");
 
                     b.HasKey("ServicioId");
-
-                    b.HasIndex("ContratoId");
 
                     b.ToTable("ContratosDetalle");
                 });
@@ -144,12 +138,16 @@ namespace Luis_Baltodano_AP1_P3.Migrations
 
             modelBuilder.Entity("Luis_Baltodano_AP1_P3.Entidades.ContratosDetalle", b =>
                 {
-                    b.HasOne("Luis_Baltodano_AP1_P3.Entidades.Contratos", null)
+                    b.HasOne("Luis_Baltodano_AP1_P3.Entidades.Servicios", "servicios")
                         .WithMany("ContratosDetalle")
-                        .HasForeignKey("ContratoId");
+                        .HasForeignKey("ServicioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("servicios");
                 });
 
-            modelBuilder.Entity("Luis_Baltodano_AP1_P3.Entidades.Contratos", b =>
+            modelBuilder.Entity("Luis_Baltodano_AP1_P3.Entidades.Servicios", b =>
                 {
                     b.Navigation("ContratosDetalle");
                 });

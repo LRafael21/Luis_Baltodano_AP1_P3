@@ -42,7 +42,7 @@
 
                 <div class="form-group col">
                     <label><b> ClienteId</b></label>
-                    <InputSelect @bind-Value="ClienteId" class="form-select ">
+                    <InputSelect @bind-Value="ClienteId"  class="form-select ">
                         <option value="0" disabled selected> Seleccione un Cliente</option>
 
                         @foreach (var item in lista)
@@ -134,6 +134,7 @@
                                 @foreach (var item in servicios.ContratosDetalle)
 
                                 {
+                                    
                                     <tr>
                                         <td>@item.ServicioId</td>
                                         <td>@item.Plan</td>
@@ -194,6 +195,8 @@
     public List<Clientes> lista { get; set; } = new List<Clientes>();
 
     public List<Servicios> lista2 { get; set; } = new List<Servicios>();
+
+    public ContratosDetalle CDetalle = new ContratosDetalle();
 
     protected override void OnInitialized()
     {
@@ -284,9 +287,23 @@
 
     }
 
-    private void AgregarDetalle()
+   /* private void AgregarDetalle()
     {
         this.servicios.ContratosDetalle.Add(new ContratosDetalle(ServicioId,Plan, Cantidad, Precio, Importe));
+
+    }*/
+
+     private void AgregarDetalle()
+    {
+        Servicios ADDServicios = serviciosBLL.Buscar(SeleccionaServicio);
+
+        this.servicios.ContratosDetalle.Add(new ContratosDetalle(
+
+            ServicioId = SeleccionaServicio,
+            Plan = ADDServicios.Plan ,
+            Cantidad, Precio, Importe
+            
+            ));
 
     }
 

@@ -35,7 +35,7 @@ namespace Luis_Baltodano_AP1_P3.Entidades
        
 
         [ForeignKey("ServicioId")]
-        public virtual List<ContratosDetalle> ContratosDetalle { get; set; }
+        public virtual List<ContratosDetalle> ContratosDetalle { get; set; }  = new List<ContratosDetalle>();
 
 
         public Servicios()
