@@ -79,7 +79,15 @@ namespace Luis_Baltodano_AP1_P3.BLLServicios
             bool paso = false;
             try
             {
+                __contexto.Database.ExecuteSqlRaw($"Delete FROM ContratosDetalle where ServicioId={servicios.ServicioId}");
+
+                foreach (var anterior in servicios.ContratosDetalle)
+                {
+                    __contexto.Entry(anterior).State = EntityState.Added;
+                }
+
                 __contexto.Entry(servicios).State = EntityState.Modified;
+
                 paso = __contexto.SaveChanges() > 0;
             }
             catch (Exception)
@@ -133,7 +141,30 @@ namespace Luis_Baltodano_AP1_P3.BLLServicios
             Servicios? servicios;
             try
             {
-                servicios = __contexto.Servicios.Find(servicioId);
+                servicios = __contexto.Servicios.Include(x => x.ContratosDetalle)
+                .Where(p => p.ServicioId == servicioId).SingleOrDefault();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return servicios;
+
+
+
+
+        }
+
+        public Servicios Buscar(string Plan)
+        {
+
+
+
+            Servicios? servicios;
+            try
+            {
+                servicios = __contexto.Servicios.Find(Plan);
             }
             catch (Exception)
             {
@@ -152,7 +183,12 @@ namespace Luis_Baltodano_AP1_P3.BLLServicios
             List<Servicios> lista = new List<Servicios>();
             try
             {
-                lista = __contexto.Servicios.Where(criterio).ToList();
+
+                lista = __contexto.Servicios
+               .Include(x => x.ContratosDetalle)
+               .Where(criterio)
+               .AsNoTracking()
+               .ToList();
             }
             catch (Exception)
             {

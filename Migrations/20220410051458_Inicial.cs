@@ -34,7 +34,7 @@ namespace Luis_Baltodano_AP1_P3.Migrations
                     ContratoId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Fecha = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    ClienteId = table.Column<string>(type: "TEXT", nullable: false),
+                    ClienteId = table.Column<int>(type: "INTEGER", nullable: false),
                     Comentarios = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: false),
                     Monto = table.Column<float>(type: "REAL", nullable: false)
                 },
@@ -52,6 +52,7 @@ namespace Luis_Baltodano_AP1_P3.Migrations
                     Plan = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     Descripcion = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     Precio = table.Column<float>(type: "REAL", nullable: false),
+                    MontoFacturado = table.Column<float>(type: "REAL", nullable: false),
                     FechaCreacion = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -63,22 +64,22 @@ namespace Luis_Baltodano_AP1_P3.Migrations
                 name: "ContratosDetalle",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    ServicioId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    ContratoId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ServicioId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Plan = table.Column<string>(type: "TEXT", nullable: false),
                     Cantidad = table.Column<decimal>(type: "TEXT", nullable: false),
-                    Precio = table.Column<decimal>(type: "TEXT", nullable: false)
+                    Precio = table.Column<float>(type: "REAL", nullable: false),
+                    Importe = table.Column<decimal>(type: "TEXT", nullable: false),
+                    ContratoId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ContratosDetalle", x => x.Id);
+                    table.PrimaryKey("PK_ContratosDetalle", x => x.ServicioId);
                     table.ForeignKey(
                         name: "FK_ContratosDetalle_Contratos_ContratoId",
                         column: x => x.ContratoId,
                         principalTable: "Contratos",
-                        principalColumn: "ContratoId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ContratoId");
                 });
 
             migrationBuilder.CreateIndex(

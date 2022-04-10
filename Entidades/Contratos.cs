@@ -16,8 +16,8 @@ namespace Luis_Baltodano_AP1_P3.Entidades
         public int ClienteId { get; set; }
 
         [Required(ErrorMessage = "Es obligatorio indicar el comentario")]
-        [MinLength(2, ErrorMessage = "El comentario debe tener al menos {0} caractéres")]
-        [MaxLength(1000, ErrorMessage = "El comentario no debe pasar de {0} caracterés")]
+        [MinLength(2, ErrorMessage = "El comentario debe tener al menos 2 caractéres")]
+        [MaxLength(1000, ErrorMessage = "El comentario no debe pasar de {1} caracterés")]
 
         public string Comentarios { get; set; }
 
@@ -26,8 +26,9 @@ namespace Luis_Baltodano_AP1_P3.Entidades
         public float Monto { get; set; }
 
 
-        [ForeignKey("ContratoId")]
-        public virtual List<ContratosDetalle> ContratosDetalle { get; set; } = new List<ContratosDetalle>();
+    
+
+       
 
     }
 }

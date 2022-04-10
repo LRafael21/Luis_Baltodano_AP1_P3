@@ -79,15 +79,7 @@ namespace Luis_Baltodano_AP1_P3.BLLContratos
             bool paso = false;
             try
             {
-                ___contexto.Database.ExecuteSqlRaw($"Delete FROM ContratosDetalle where ContratoId={contratos.ContratoId}");
-
-                foreach (var anterior in contratos.ContratosDetalle)
-                {
-                    ___contexto.Entry(anterior).State = EntityState.Added;
-                }
-
                 ___contexto.Entry(contratos).State = EntityState.Modified;
-
                 paso = ___contexto.SaveChanges() > 0;
             }
             catch (Exception)
@@ -139,7 +131,7 @@ namespace Luis_Baltodano_AP1_P3.BLLContratos
             Contratos? contratos;
             try
             {
-                contratos = ___contexto.Contratos.Include(x => x.ContratosDetalle).Where(p => p.ContratoId == contratoId).SingleOrDefault();
+                contratos = ___contexto.Contratos.Find(contratoId);
             }
             catch (Exception)
             {
@@ -156,11 +148,7 @@ namespace Luis_Baltodano_AP1_P3.BLLContratos
             List<Contratos> lista = new List<Contratos>();
             try
             {
-                lista = ___contexto.Contratos
-               .Include(x => x.ContratosDetalle)
-               .Where(criterio)
-               .AsNoTracking()
-               .ToList();
+                lista = ___contexto.Contratos.Where(criterio).ToList();
             }
             catch (Exception)
             {

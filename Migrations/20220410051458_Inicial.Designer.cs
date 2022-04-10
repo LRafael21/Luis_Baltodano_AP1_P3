@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Luis_Baltodano_AP1_P3.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20220404044701_Inicial")]
+    [Migration("20220410051458_Inicial")]
     partial class Inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -64,9 +64,8 @@ namespace Luis_Baltodano_AP1_P3.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("ClienteId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("ClienteId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Comentarios")
                         .IsRequired()
@@ -86,23 +85,27 @@ namespace Luis_Baltodano_AP1_P3.Migrations
 
             modelBuilder.Entity("Luis_Baltodano_AP1_P3.Entidades.ContratosDetalle", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ServicioId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<decimal>("Cantidad")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ContratoId")
+                    b.Property<int?>("ContratoId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<decimal>("Precio")
+                    b.Property<decimal>("Importe")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ServicioId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Plan")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.Property<float>("Precio")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("ServicioId");
 
                     b.HasIndex("ContratoId");
 
@@ -123,6 +126,9 @@ namespace Luis_Baltodano_AP1_P3.Migrations
                     b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("TEXT");
 
+                    b.Property<float>("MontoFacturado")
+                        .HasColumnType("REAL");
+
                     b.Property<string>("Plan")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -140,9 +146,7 @@ namespace Luis_Baltodano_AP1_P3.Migrations
                 {
                     b.HasOne("Luis_Baltodano_AP1_P3.Entidades.Contratos", null)
                         .WithMany("ContratosDetalle")
-                        .HasForeignKey("ContratoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ContratoId");
                 });
 
             modelBuilder.Entity("Luis_Baltodano_AP1_P3.Entidades.Contratos", b =>

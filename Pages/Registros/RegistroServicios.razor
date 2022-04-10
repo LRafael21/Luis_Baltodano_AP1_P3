@@ -29,30 +29,12 @@
                 <div class="form-row align-items-center">
 
                     <div class="input-group d-flex align-items-end">
-                        <div class="form-group col">
+                        <div class="form-group col" style="width: 30%">
                             <label><b>Servicio Id</b></label>
                             <div class="input-group">
                                 <InputNumber @bind-Value="servicios.ServicioId" class="form-control col-4" />
                             </div>
                         </div>
-
-                    
-                        <div class="form-group col">
-                            <label><b> ClienteId</b></label>
-                               <InputSelect class="form-select " @bind-Value="ClienteId">
-                               
-
-                                @foreach (var item in lista)
-                                {
-                                 
-
-                                    <option value="@item.ClienteId">@item.ClienteId</option>
-                                }
-                            </InputSelect>
-
-                        </div>
-
-
 
                         @* Boton Buscar *@
                         <div class="input-group-append">
@@ -64,11 +46,11 @@
                     </div>
 
                     @* Plan *@
-                    <div clas="form-group">
+                    <div class="form-group">
 
                         <label><b>Plan</b></label>
                         <InputSelect class="form-select " style="width: 30%" @bind-Value="servicios.Plan">
-                            <option>Elegir Producto</option>
+                            <option>Elegir Plan</option>
                             <option>Internet (5Mbps - 1Mbps) - Cable (120 Canales)</option>
                             <option>Internet (10Mbps - 5Mbps) - Cable (150 Canales)</option>
                             <option>Internet (100Mbps - 50Mbps) - Cable (300 Canales)</option>
@@ -81,7 +63,7 @@
                         </InputSelect>
                     </div>
 
-                    <div clas="form-group">
+                    <div class="form-group">
 
                         <label><b>Precio</b></label>
                         <InputNumber class="form-control" @bind-Value="servicios.Precio" placeholder="Ejemplo: 500" />
@@ -89,12 +71,22 @@
                     </div>
 
                     @* Descripcion *@
-                    <div clas="form-group">
+                    <div class="form-group">
 
                         <label><b>Descripcion</b></label>
-                        <InputText class="form-control" @bind-Value="servicios.Descripcion" />
+                        <InputText class="form-control" @bind-Value="servicios.Descripcion"  />
                         <ValidationMessage For="@(() => servicios.Descripcion)" placeholder="Ejemplo: Ingrese Descripcion" />
                     </div>
+
+                    <div class="form-group">
+
+                        <label><b>Monto Facturado</b></label>
+                        <InputNumber readonly class="form-control" @bind-Value="servicios.MontoFacturado" style="width: 20%" />
+                        <ValidationMessage For="@(() => servicios.MontoFacturado)" placeholder="Este es el monto total facturado del servicio elegido" />
+                    </div>
+
+
+
 
                     <br>
                     <div class="card-footer">
@@ -129,13 +121,11 @@
     public ClientesBLL clientesBLL { get; set; }
 
     public Servicios servicios { get; set; } = new Servicios();
-    public Clientes clientes { get; set; } = new Clientes();
-    public List<Clientes> lista { get; set; } = new List<Clientes>();
+
 
     protected override void OnInitialized()
     {
         servicios.ServicioId = ServicioId;
-        lista = clientesBLL.GetList(t => true);
         Buscar();
         Nuevo();
     }
