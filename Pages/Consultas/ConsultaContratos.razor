@@ -115,10 +115,19 @@
     public List<Servicios> lista2 { get; set; } = new List<Servicios>();
 
 
+
     [Inject]
     public ContratosBLL contratosBLL { get; set; }
     [Inject]
     public ServiciosBLL serviciosBLL { get; set; }
+
+     protected override void OnInitialized()
+    {
+      
+        lista = contratosBLL.GetList(t => true);
+        lista2 = serviciosBLL.GetList(t => true);
+       
+    }
 
     private void Buscar()
     {
@@ -156,9 +165,7 @@
         }
         else
         {
-
-            lista = contratosBLL.GetList(e => true);
-            lista2 = serviciosBLL.GetList(e => true);
+            OnInitialized();
         }
     }
 }
