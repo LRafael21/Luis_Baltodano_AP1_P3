@@ -1,0 +1,144 @@
+@page "/ConsultaDetalles"
+
+
+
+<EditForm Model="lista">
+    <DataAnnotationsValidator />
+
+    <div class="card">
+
+        <div class="card-header">
+            <h3>
+                <center> <b>Consulta de Detalles</b></center>
+
+            </h3>
+        </div>
+
+        <div class="card-body">
+
+            <form>
+
+                <div class="input-group d-flex align-items-end">
+
+                    <InputSelect class="form-control col-2" @bind-Value="filtro">
+                        <option value="0">Todos </option>
+                        <option value="1">ID</option>
+                        <option value="2">Descripcion</option>
+                        <option value="3">Cantidad</option>
+                        <option value="4">Precio</option>
+                        <option value="5">Importe</option>
+
+                    </InputSelect>
+
+                    <div class="flex-fill mx-2">
+                        <label>Criterio</label>
+                        <input type="text" class="form-control" @bind="Criterio" />
+                    </div>
+
+                    <button type="button" class="btn btn-warning" @onclick="Buscar">
+                        <i class="oi oi-magnifying-glass mr-2" /> <b> Buscar</b>
+                    </button>
+                </div>
+
+            </form>
+        </div>
+        <table class="table table-success table-striped">
+            <thead class="thead-dark">
+                <tr class="table-info">
+                    <th>ID</th>
+                    <th>Descripcion</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Importe</th>
+                    <th>Ver</th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in lista)
+                {
+                    @foreach (var detalle in item.ContratosDetalle)
+                    {
+                        <tr>
+                            <td>@detalle.Id</td>
+                            <td>@detalle.servicios.Plan.Descripcion</td>
+                            <td>@detalle.Cantidad</td>
+                            <td>RD$ @detalle.servicios.Precio</td>
+                            <td>@detalle.Importe</td>
+                            <td><a class="btn btn-sm btn-outline-primary oi oi-eye"
+                            href="RegistroContratos/@item.ContratoId">Ver</a></td>
+                        </tr>
+
+                    }
+                }
+
+
+            </tbody>
+
+        </table>
+
+
+    </div>
+
+    @foreach (var items in lista)
+    {
+        contar = items.ContratoId;
+    }
+    <label><b>Total Detalle:</b> @contar</label>
+
+
+</EditForm>
+
+@code {
+    public Contratos contratos { get; set; } = new Contratos();
+    public int contar;
+    public string filtro { get; set; }
+    public string Criterio { get; set; }
+    public List<Contratos> lista { get; set; } = new List<Contratos>();
+
+    public List<Servicios> lista2 { get; set; } = new List<Servicios>();
+
+
+    [Inject]
+    public ContratosBLL contratosBLL { get; set; }
+    [Inject]
+    public ServiciosBLL serviciosBLL { get; set; }
+
+    private void Buscar()
+    {
+        if (Criterio != null)
+        {
+            switch (filtro)
+            {
+                case "1":
+                    lista = contratosBLL.GetList(e => e.ContratoId == int.Parse(Criterio));
+                    break;
+
+                case "2":
+                    lista2 = serviciosBLL.GetList(e => e.Plan.Descripcion.ToLower().Contains(Criterio.ToLower()));
+                    break;
+
+                case "3":
+                    lista2 = serviciosBLL.GetList(e => e.Precio == int.Parse(Criterio));
+                    break;
+
+             @*    case "4":
+                    lista2 = serviciosBLL.GetList(e => e.Importe == int.Parse(Criterio));
+                    break; *@
+
+
+
+
+
+
+            }
+        }
+        else
+        {
+
+            lista = contratosBLL.GetList(e => true);
+            lista2 = serviciosBLL.GetList(e => true);
+        }
+    }
+}

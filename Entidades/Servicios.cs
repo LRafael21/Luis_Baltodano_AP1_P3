@@ -12,10 +12,8 @@ namespace Luis_Baltodano_AP1_P3.Entidades
 
 
         [Required(ErrorMessage = "Es obligatorio indicar el Plan")]
-        [MinLength(2, ErrorMessage = "El Plan debe tener al menos {0} caractéres.")]
-        [MaxLength(50, ErrorMessage = "El Plan no debe pasar de {0} caractéres.")]
 
-        public string Plan { get; set; }
+        public Planes Plan { get; set; } = new Planes();
 
         [Required(ErrorMessage = "Es obligatorio indicar la Descripcion")]
         [MinLength(2, ErrorMessage = "La descripcion debe tener al menos {0} caractéres")]

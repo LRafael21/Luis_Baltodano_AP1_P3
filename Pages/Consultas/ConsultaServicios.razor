@@ -117,8 +117,9 @@
                         lista = serviciosBLL.GetList(p => p.ServicioId == int.Parse(Criterio) || (p.FechaCreacion >= FechaHasta &&
                         p.FechaCreacion <= FechaHasta));
                     break;
+
                 case "2":
-                    lista = serviciosBLL.GetList(p => p.Plan.ToLower().Contains(Criterio.ToLower()));
+                    lista = serviciosBLL.GetList(p => p.Plan.Descripcion.ToLower().Contains(Criterio.ToLower()));
                     break;
                 case "3":
                     lista = serviciosBLL.GetList(e => e.Precio == int.Parse(Criterio));

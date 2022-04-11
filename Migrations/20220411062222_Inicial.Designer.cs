@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Luis_Baltodano_AP1_P3.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20220411032732_Inicial")]
+    [Migration("20220411062222_Inicial")]
     partial class Inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -89,7 +89,7 @@ namespace Luis_Baltodano_AP1_P3.Migrations
                     b.Property<float>("Cantidad")
                         .HasColumnType("REAL");
 
-                    b.Property<int?>("ContratoId")
+                    b.Property<int>("ContratoId")
                         .HasColumnType("INTEGER");
 
                     b.Property<float>("Importe")
@@ -110,6 +110,63 @@ namespace Luis_Baltodano_AP1_P3.Migrations
                     b.ToTable("ContratosDetalle");
                 });
 
+            modelBuilder.Entity("Luis_Baltodano_AP1_P3.Entidades.Planes", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Planes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Descripcion = "Internet(5Mbps - 1Mbps) - Cable(120 Canales)"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Descripcion = "Internet (100Mbps - 50Mbps) - Cable (300 Canales)"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Descripcion = "Internet (5Mbps - 1Mbps)"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Descripcion = "(10Mbps - 5Mbps)"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Descripcion = "Internet (100Mbps - 50Mbps)"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Descripcion = "Cable (120 Canales)"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Descripcion = " Cable (150 Canales)"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Descripcion = "Cable (300 Canales)"
+                        });
+                });
+
             modelBuilder.Entity("Luis_Baltodano_AP1_P3.Entidades.Servicios", b =>
                 {
                     b.Property<int>("ServicioId")
@@ -127,24 +184,26 @@ namespace Luis_Baltodano_AP1_P3.Migrations
                     b.Property<float>("MontoFacturado")
                         .HasColumnType("REAL");
 
-                    b.Property<string>("Plan")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
+                    b.Property<int>("PlanId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<float>("Precio")
                         .HasColumnType("REAL");
 
                     b.HasKey("ServicioId");
 
+                    b.HasIndex("PlanId");
+
                     b.ToTable("Servicios");
                 });
 
             modelBuilder.Entity("Luis_Baltodano_AP1_P3.Entidades.ContratosDetalle", b =>
                 {
-                    b.HasOne("Luis_Baltodano_AP1_P3.Entidades.Contratos", null)
+                    b.HasOne("Luis_Baltodano_AP1_P3.Entidades.Contratos", "contratos")
                         .WithMany("ContratosDetalle")
-                        .HasForeignKey("ContratoId");
+                        .HasForeignKey("ContratoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Luis_Baltodano_AP1_P3.Entidades.Servicios", "servicios")
                         .WithMany()
@@ -152,7 +211,20 @@ namespace Luis_Baltodano_AP1_P3.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("contratos");
+
                     b.Navigation("servicios");
+                });
+
+            modelBuilder.Entity("Luis_Baltodano_AP1_P3.Entidades.Servicios", b =>
+                {
+                    b.HasOne("Luis_Baltodano_AP1_P3.Entidades.Planes", "Plan")
+                        .WithMany()
+                        .HasForeignKey("PlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Plan");
                 });
 
             modelBuilder.Entity("Luis_Baltodano_AP1_P3.Entidades.Contratos", b =>

@@ -130,7 +130,7 @@
 
                                     <tr>
                                         <td>@detalle.servicios.ServicioId</td>
-                                        <td>@detalle.servicios.Plan</td>
+                                        <td>@detalle.servicios.Plan.Descripcion</td>
                                         <td>@detalle.Cantidad</td>
                                         <td>RD$@detalle.servicios.Precio</td>
                                         <td>RD$@detalle.Importe</td>
@@ -202,8 +202,6 @@
 
 
 
-
-
     public void Buscar()
     {
         if (this.contratos.ContratoId > 0)
@@ -230,13 +228,18 @@
 
     public void Guardar()
     {
-
-        if (contratosBLL.Guardar(contratos))
+        if (ContratoValido())
         {
-            toastService.ShowInfo("Contratos guardado exitosamente.");
+
+
+            if (contratosBLL.Guardar(contratos))
+            {
+                Nuevo();
+                toastService.ShowInfo("Contratos guardado exitosamente.");
+            }
+            else
+                toastService.ShowError("No se pudo guardar el contratos.");
         }
-        else
-            toastService.ShowError("No se pudo guardar el contratos.");
     }
     public void Eliminar()
     {
@@ -263,6 +266,20 @@
         this.contratosDetalle = new ContratosDetalle();
         servicios = new Servicios();
 
+    }
+
+    public bool ContratoValido()
+    {
+        bool valido = true;
+
+        if (contratos.ContratosDetalle.Count <= 0)
+        {
+            valido = false;
+
+            toastService.ShowError("Se debe indicar un servicio", "Contrato Invalido");
+        }
+
+        return valido;
     }
 
 

@@ -36,6 +36,7 @@ namespace Luis_Baltodano_AP1_P3.BLL
          
             return encontrado;
         }
+        
         public  bool Existe(string nombre)
         {
       
@@ -125,7 +126,7 @@ namespace Luis_Baltodano_AP1_P3.BLL
 
         }
 
-        public Clientes Buscar(int clienteId)
+        public Clientes? Buscar(int clienteId)
         {
 
 
@@ -143,6 +144,22 @@ namespace Luis_Baltodano_AP1_P3.BLL
             return clientes;
 
 
+        }
+
+        public Clientes? BuscarPorCedula(string cedula)
+        {
+
+            Clientes? clientes;
+            try
+            {
+                clientes = _contexto.Clientes.Where(c => c.NumeroCedula.Contains(cedula)).AsNoTracking().FirstOrDefault();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return clientes;
 
 
         }

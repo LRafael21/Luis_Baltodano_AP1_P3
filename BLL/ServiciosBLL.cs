@@ -61,6 +61,8 @@ namespace Luis_Baltodano_AP1_P3.BLLServicios
 
             try
             {
+                __contexto.Entry(servicios.Plan).State = EntityState.Modified;
+
                 __contexto.Servicios.Add(servicios);
                 paso = __contexto.SaveChanges() > 0;
             }
@@ -79,6 +81,7 @@ namespace Luis_Baltodano_AP1_P3.BLLServicios
             bool paso = false;
             try
             {
+                
                 __contexto.Entry(servicios).State = EntityState.Modified;
                 paso = __contexto.SaveChanges() > 0;
 
@@ -134,7 +137,7 @@ namespace Luis_Baltodano_AP1_P3.BLLServicios
             Servicios? servicios;
             try
             {
-                servicios = __contexto.Servicios.Find(servicioId);
+                servicios = __contexto.Servicios.Where(c => c.ServicioId == servicioId).Include(c => c.Plan).AsNoTracking().FirstOrDefault();
             }
             catch (Exception)
             {
@@ -165,9 +168,6 @@ namespace Luis_Baltodano_AP1_P3.BLLServicios
             }
             return servicios;
 
-
-
-
         }
         public List<Servicios> GetList(Expression<Func<Servicios, bool>> criterio)
         {
@@ -175,7 +175,7 @@ namespace Luis_Baltodano_AP1_P3.BLLServicios
             List<Servicios> lista = new List<Servicios>();
             try
             {
-                lista = __contexto.Servicios.Where(criterio).ToList();
+                lista = __contexto.Servicios.Where(criterio).Include(c => c.Plan).AsNoTracking().ToList();
 
             }
             catch (Exception)

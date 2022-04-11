@@ -43,12 +43,25 @@ namespace Luis_Baltodano_AP1_P3.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Planes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Descripcion = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Planes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Servicios",
                 columns: table => new
                 {
                     ServicioId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Plan = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    PlanId = table.Column<int>(type: "INTEGER", nullable: false),
                     Descripcion = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     Precio = table.Column<float>(type: "REAL", nullable: false),
                     MontoFacturado = table.Column<float>(type: "REAL", nullable: false),
@@ -57,6 +70,12 @@ namespace Luis_Baltodano_AP1_P3.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Servicios", x => x.ServicioId);
+                    table.ForeignKey(
+                        name: "FK_Servicios_Planes_PlanId",
+                        column: x => x.PlanId,
+                        principalTable: "Planes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -69,7 +88,7 @@ namespace Luis_Baltodano_AP1_P3.Migrations
                     Importe = table.Column<float>(type: "REAL", nullable: false),
                     MontoTotal = table.Column<float>(type: "REAL", nullable: false),
                     serviciosServicioId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ContratoId = table.Column<int>(type: "INTEGER", nullable: true)
+                    ContratoId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -78,7 +97,8 @@ namespace Luis_Baltodano_AP1_P3.Migrations
                         name: "FK_ContratosDetalle_Contratos_ContratoId",
                         column: x => x.ContratoId,
                         principalTable: "Contratos",
-                        principalColumn: "ContratoId");
+                        principalColumn: "ContratoId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ContratosDetalle_Servicios_serviciosServicioId",
                         column: x => x.serviciosServicioId,
@@ -86,6 +106,46 @@ namespace Luis_Baltodano_AP1_P3.Migrations
                         principalColumn: "ServicioId",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Planes",
+                columns: new[] { "Id", "Descripcion" },
+                values: new object[] { 1, "Internet(5Mbps - 1Mbps) - Cable(120 Canales)" });
+
+            migrationBuilder.InsertData(
+                table: "Planes",
+                columns: new[] { "Id", "Descripcion" },
+                values: new object[] { 2, "Internet (100Mbps - 50Mbps) - Cable (300 Canales)" });
+
+            migrationBuilder.InsertData(
+                table: "Planes",
+                columns: new[] { "Id", "Descripcion" },
+                values: new object[] { 3, "Internet (5Mbps - 1Mbps)" });
+
+            migrationBuilder.InsertData(
+                table: "Planes",
+                columns: new[] { "Id", "Descripcion" },
+                values: new object[] { 4, "(10Mbps - 5Mbps)" });
+
+            migrationBuilder.InsertData(
+                table: "Planes",
+                columns: new[] { "Id", "Descripcion" },
+                values: new object[] { 5, "Internet (100Mbps - 50Mbps)" });
+
+            migrationBuilder.InsertData(
+                table: "Planes",
+                columns: new[] { "Id", "Descripcion" },
+                values: new object[] { 6, "Cable (120 Canales)" });
+
+            migrationBuilder.InsertData(
+                table: "Planes",
+                columns: new[] { "Id", "Descripcion" },
+                values: new object[] { 7, " Cable (150 Canales)" });
+
+            migrationBuilder.InsertData(
+                table: "Planes",
+                columns: new[] { "Id", "Descripcion" },
+                values: new object[] { 8, "Cable (300 Canales)" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_ContratosDetalle_ContratoId",
@@ -96,6 +156,11 @@ namespace Luis_Baltodano_AP1_P3.Migrations
                 name: "IX_ContratosDetalle_serviciosServicioId",
                 table: "ContratosDetalle",
                 column: "serviciosServicioId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Servicios_PlanId",
+                table: "Servicios",
+                column: "PlanId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -111,6 +176,9 @@ namespace Luis_Baltodano_AP1_P3.Migrations
 
             migrationBuilder.DropTable(
                 name: "Servicios");
+
+            migrationBuilder.DropTable(
+                name: "Planes");
         }
     }
 }

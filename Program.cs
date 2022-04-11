@@ -5,6 +5,7 @@ using Luis_Baltodano_AP1_P3.DAL;
 using Luis_Baltodano_AP1_P3.BLL;
 using Luis_Baltodano_AP1_P3.BLLServicios;
 using Luis_Baltodano_AP1_P3.BLLContratos;
+using Luis_Baltodano_AP1_P3.BLLPlanes;
 using Luis_Baltodano_AP1_P3.Entidades;
 using Microsoft.EntityFrameworkCore;
 using Blazored.Toast;
@@ -23,6 +24,7 @@ builder.Services.AddDbContext<Contexto>(options => options.UseSqlite(builder.Con
 
 //Inyectar BLL
 builder.Services.AddTransient<ClientesBLL>();
+builder.Services.AddTransient<PlanesBLL>();
 builder.Services.AddTransient<ServiciosBLL>();
 builder.Services.AddTransient<ContratosBLL>();
 

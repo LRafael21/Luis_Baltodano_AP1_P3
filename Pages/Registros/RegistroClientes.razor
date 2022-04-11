@@ -17,7 +17,7 @@
 
         <div class="card-body">
 
-              <div class="form-row align-items-center">
+            <div class="form-row align-items-center">
                 <div class="col">
                     <div class="form-group">
                         <label><b>Cliente Id</b></label>
@@ -131,18 +131,51 @@
         clientes = new Clientes();
     }
 
+    private bool RegistroValido()
+    {
+        bool Valido = true;
+        try
+        {
+            var clienteBuscado = clientesBLL.BuscarPorCedula(this.clientes.NumeroCedula);
+            if (clienteBuscado != null && clienteBuscado.ClienteId != this.clientes.ClienteId)
+            {
+                Valido = false;
+
+                toastService.ShowError("Cedula ya registrada", "Error" );
+
+            }
+
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+
+        return Valido;
+
+
+
+    }
+
 
 
     public void Guardar()
     {
 
-        if (clientesBLL.Guardar(clientes))
+        if (RegistroValido())
         {
-            Nuevo();
-            toastService.ShowInfo("Cliente guardado exitosamente.");
+
+            if (clientesBLL.Guardar(clientes))
+            {
+
+                Nuevo();
+                toastService.ShowInfo("Cliente guardado exitosamente.");
+            }
+            else
+                toastService.ShowError("No se pudo guardar el cliente.");
         }
-        else
-            toastService.ShowError("No se pudo guardar el cliente.");
+
     }
     public void Eliminar()
     {

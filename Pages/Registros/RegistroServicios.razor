@@ -49,17 +49,12 @@
                     <div class="form-group">
 
                         <label><b>Plan</b></label>
-                        <InputSelect class="form-select " style="width: 30%" @bind-Value="servicios.Plan">
-                            <option>Elegir Plan</option>
-                            <option>Internet (5Mbps - 1Mbps) - Cable (120 Canales)</option>
-                            <option>Internet (10Mbps - 5Mbps) - Cable (150 Canales)</option>
-                            <option>Internet (100Mbps - 50Mbps) - Cable (300 Canales)</option>
-                            <option>Internet (5Mbps - 1Mbps)</option>
-                            <option>Internet (10Mbps - 5Mbps)</option>
-                            <option>Internet (100Mbps - 50Mbps)</option>
-                            <option>Cable (120 Canales)</option>
-                            <option> Cable (150 Canales)</option>
-                            <option>Cable (300 Canales)</option>
+                        <InputSelect class="form-select " style="width: 30%" @bind-Value="cadena">
+                            <option selected hidden value="0">Elegir Plan</option>
+                            @foreach (var plan in listadePlanes)
+                            {
+                                <option value="@plan.Id.ToString()">@plan.Descripcion</option>
+                            }
                         </InputSelect>
                     </div>
 
@@ -74,15 +69,18 @@
                     <div class="form-group">
 
                         <label><b>Descripcion</b></label>
-                        <InputText class="form-control" @bind-Value="servicios.Descripcion"  />
-                        <ValidationMessage For="@(() => servicios.Descripcion)" placeholder="Ejemplo: Ingrese Descripcion" />
+                        <InputText class="form-control" @bind-Value="servicios.Descripcion" />
+                        <ValidationMessage For="@(() => servicios.Descripcion)"
+                            placeholder="Ejemplo: Ingrese Descripcion" />
                     </div>
 
                     <div class="form-group">
 
                         <label><b>Monto Facturado</b></label>
-                        <InputNumber readonly class="form-control" @bind-Value="servicios.MontoFacturado" style="width: 20%" />
-                        <ValidationMessage For="@(() => servicios.MontoFacturado)" placeholder="Este es el monto total facturado del servicio elegido" />
+                        <InputNumber readonly class="form-control" @bind-Value="servicios.MontoFacturado"
+                            style="width: 20%" />
+                        <ValidationMessage For="@(() => servicios.MontoFacturado)"
+                            placeholder="Este es el monto total facturado del servicio elegido" />
                     </div>
 
 
@@ -118,16 +116,19 @@
     public ServiciosBLL serviciosBLL { get; set; }
 
     [Inject]
-    public ClientesBLL clientesBLL { get; set; }
+    public PlanesBLL planesBLL { get; set; }
+
+    public List<Planes> listadePlanes { get; set; } = new List<Planes>();
 
     public Servicios servicios { get; set; } = new Servicios();
 
-
-    protected override void OnInitialized()
+    string cadena;
+protected override void OnInitialized()
     {
         servicios.ServicioId = ServicioId;
+        listadePlanes = planesBLL.GetList();
         Buscar();
- 
+
     }
 
 
@@ -158,6 +159,7 @@
 
     public void Guardar()
     {
+        servicios.Plan = planesBLL.Buscar(int.Parse(cadena));
 
         if (serviciosBLL.Guardar(servicios))
         {

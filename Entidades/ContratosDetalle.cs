@@ -7,7 +7,7 @@ namespace Luis_Baltodano_AP1_P3.Entidades
         [Key]
         public int Id { get; set; }
 
-
+        public Contratos contratos { get; set; } = new Contratos();
 
         public float Cantidad { get; set; }
 
@@ -18,7 +18,7 @@ namespace Luis_Baltodano_AP1_P3.Entidades
 
         public virtual Servicios servicios { get; set; }
   
-
+        public int ContratoId { get; set; }
 
       
 

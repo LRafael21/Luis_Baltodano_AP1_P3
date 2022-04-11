@@ -149,9 +149,11 @@ namespace Luis_Baltodano_AP1_P3.BLLContratos
 
                     foreach (var detalle in contratos.ContratosDetalle)
                     {
+                        ___contexto.Entry(detalle.servicios.Plan).State =  EntityState.Modified;
                         ___contexto.Entry(detalle.servicios).State = EntityState.Modified;
                         detalle.servicios.MontoFacturado -= detalle.Cantidad * detalle.servicios.Precio;
                     }
+                  
                     ___contexto.Contratos.Remove(contratos);
                     paso = ___contexto.SaveChanges() > 0;
                 }
@@ -172,7 +174,7 @@ namespace Luis_Baltodano_AP1_P3.BLLContratos
             Contratos? contratos;
             try
             {
-                contratos = ___contexto.Contratos.Include(x => x.ContratosDetalle).ThenInclude(x => x.servicios)
+                contratos = ___contexto.Contratos.Include(x => x.ContratosDetalle).ThenInclude(x => x.servicios).ThenInclude(x => x.Plan)
                 .Where(p => p.ContratoId == contratoId).AsNoTracking().SingleOrDefault();
             }
             catch (Exception)
@@ -193,6 +195,7 @@ namespace Luis_Baltodano_AP1_P3.BLLContratos
                 lista = ___contexto.Contratos
                .Include(x => x.ContratosDetalle)
                .ThenInclude(x => x.servicios)
+               .ThenInclude(x => x.Plan)
                .Where(criterio)
                .AsNoTracking()
                .ToList();
