@@ -121,13 +121,7 @@
     [Inject]
     public ServiciosBLL serviciosBLL { get; set; }
 
-     protected override void OnInitialized()
-    {
-      
-        lista = contratosBLL.GetList(t => true);
-        lista2 = serviciosBLL.GetList(t => true);
-       
-    }
+  
 
     private void Buscar()
     {
@@ -165,7 +159,8 @@
         }
         else
         {
-            OnInitialized();
+            lista = contratosBLL.GetList(t => true);
+            lista2 = serviciosBLL.GetList(t => true);
         }
     }
 }
