@@ -18,8 +18,10 @@
 
                 <InputSelect class="form-select " @bind-Value="filtro">
                     <option value="0">Todos</option>
-                    <option value="1">Comentarios</option>
-                    <option value="2">Monto</option>
+                    <option value="1">Id</option>
+                    <option value="2">Cliente</option>
+                    <option value="3">Comentarios</option>
+
                     @* Filtrar por Fecha *@
                 </InputSelect>
 
@@ -50,9 +52,8 @@
     <table class="table table-success table-striped">
         <thead class="thead-dark">
             <tr class="table-info">
-            
+                <th>Id</th>
                 <th>Comentarios</th>
-                <th>Monto</th>
                 <th>Fecha</th>
                 <th>Ver</th>
             </tr>
@@ -61,10 +62,12 @@
             @foreach (var item in lista)
             {
                 <tr>
+                    <td>@item.ContratoId</td>
                     <td>@item.Comentarios</td>
-                   @*  <td>@item.Monto</td> *@
                     <td>@item.Fecha</td> @* <----Fecha *@
-                     <td><a class="btn btn-sm btn-outline-primary oi oi-eye" href="RegistroClientes/@item.ClienteId">Ver</a></td>
+                    <td><a class="btn btn-sm btn-outline-primary oi oi-eye"
+                        href="RegistroContratos/@item.ContratoId">Ver</a>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -90,6 +93,8 @@
     public DateTime? FechaHasta { get; set; } = null;
 
     public List<Contratos> lista { get; set; } = new List<Contratos>();
+    public List<Clientes> lista2 { get; set; } = new List<Clientes>();
+    public Clientes clientes { get; set; } = new Clientes();
 
     [Inject]
     public ContratosBLL contratosBLL { get; set; }
@@ -101,18 +106,23 @@
             switch (filtro)
             {
                 case "1":
-                    lista = contratosBLL.GetList(p => p.Comentarios.ToLower().Contains(Criterio.ToLower()));
+                    if (FechaDesde != null || FechaHasta != null)
+                        lista = contratosBLL.GetLista(p => p.ContratoId == int.Parse(Criterio) && (p.Fecha >= FechaDesde &&
+                        p.Fecha <= FechaHasta));
+                    else
+                        lista = contratosBLL.GetLista(p => p.ClienteId == int.Parse(Criterio) || (p.Fecha >= FechaHasta &&
+                        p.Fecha <= FechaHasta));
                     break;
-               @*  case "2":
-                    lista = contratosBLL.GetList(p => p.Monto == int.Parse(Criterio));
-                    break;
- *@
+                    @* case "2":
+                        lista = contratosBLL.GetList(p => p.Monto == int.Parse(Criterio));
+                        break;
+                    *@
             }
         }
 
         else
         {
-            lista = contratosBLL.GetList(p => true);
+            lista = contratosBLL.GetLista(p => true);
 
         }
 

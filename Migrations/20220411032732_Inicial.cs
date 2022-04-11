@@ -65,12 +65,11 @@ namespace Luis_Baltodano_AP1_P3.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    ContratoId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ServicioId = table.Column<int>(type: "INTEGER", nullable: false),
                     Cantidad = table.Column<float>(type: "REAL", nullable: false),
                     Importe = table.Column<float>(type: "REAL", nullable: false),
                     MontoTotal = table.Column<float>(type: "REAL", nullable: false),
-                    serviciosServicioId = table.Column<int>(type: "INTEGER", nullable: false)
+                    serviciosServicioId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ContratoId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -79,8 +78,7 @@ namespace Luis_Baltodano_AP1_P3.Migrations
                         name: "FK_ContratosDetalle_Contratos_ContratoId",
                         column: x => x.ContratoId,
                         principalTable: "Contratos",
-                        principalColumn: "ContratoId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ContratoId");
                     table.ForeignKey(
                         name: "FK_ContratosDetalle_Servicios_serviciosServicioId",
                         column: x => x.serviciosServicioId,

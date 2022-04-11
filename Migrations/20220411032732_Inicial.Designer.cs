@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Luis_Baltodano_AP1_P3.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20220410204253_Inicial")]
+    [Migration("20220411032732_Inicial")]
     partial class Inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -89,7 +89,7 @@ namespace Luis_Baltodano_AP1_P3.Migrations
                     b.Property<float>("Cantidad")
                         .HasColumnType("REAL");
 
-                    b.Property<int>("ContratoId")
+                    b.Property<int?>("ContratoId")
                         .HasColumnType("INTEGER");
 
                     b.Property<float>("Importe")
@@ -97,9 +97,6 @@ namespace Luis_Baltodano_AP1_P3.Migrations
 
                     b.Property<float>("MontoTotal")
                         .HasColumnType("REAL");
-
-                    b.Property<int>("ServicioId")
-                        .HasColumnType("INTEGER");
 
                     b.Property<int>("serviciosServicioId")
                         .HasColumnType("INTEGER");
@@ -147,9 +144,7 @@ namespace Luis_Baltodano_AP1_P3.Migrations
                 {
                     b.HasOne("Luis_Baltodano_AP1_P3.Entidades.Contratos", null)
                         .WithMany("ContratosDetalle")
-                        .HasForeignKey("ContratoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ContratoId");
 
                     b.HasOne("Luis_Baltodano_AP1_P3.Entidades.Servicios", "servicios")
                         .WithMany()

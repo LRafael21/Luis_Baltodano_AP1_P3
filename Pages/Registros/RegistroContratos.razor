@@ -1,4 +1,5 @@
 @page "/RegistroContratos"
+@page "/RegistroContratos/{ContratoId:int}"
 
 
 @inject IToastService toastService
@@ -145,7 +146,7 @@
 
                             @foreach (var items in contratos.ContratosDetalle)
                             {
-                                contratosDetalle.MontoTotal = items.Importe;
+                                contratosDetalle.MontoTotal += items.Importe;
                             }
                             <label><b>Monto Total:</b></label>
                             <InputNumber readonly class="form-control" @bind-Value=" contratosDetalle.MontoTotal" />
@@ -170,6 +171,8 @@
 
 </EditForm>
 @code {
+    [Parameter]
+    public int ContratoId { get; set; }
 
 
     [Inject]
@@ -191,34 +194,14 @@
     protected override void OnInitialized()
     {
         contratos.ContratoId = ContratoId;
-       // servicios.ServicioId = ServicioId;
         lista = clientesBLL.GetList(t => true);
         lista2 = serviciosBLL.GetList(t => true);
         Buscar();
-        
-    }
-    public int ClienteId { get; set; }
 
-    public int ContratoId { get; set; }
-
-  //  public int ServicioId { get; set; }
-
-   
-
-    private void ObtenerDatos()
-    {
-        Servicios servicioAgregar = serviciosBLL.Buscar(servicios.ServicioId);
-
-        if (servicioAgregar != null)
-        {
-            servicios = servicioAgregar;
-        }
     }
 
-    private void CalcularImporte()
-    {
-        contratosDetalle.Importe = contratosDetalle.Cantidad * servicios.Precio;
-    }
+
+
 
 
     public void Buscar()
@@ -271,11 +254,6 @@
 
     }
 
-    /* private void AgregarDetalle()
-    {
-    this.servicios.ContratosDetalle.Add(new ContratosDetalle(ServicioId,Plan, Cantidad, Precio, Importe));
-
-    }*/
 
     private void AgregarDetalle()
     {
@@ -285,11 +263,24 @@
         this.contratosDetalle = new ContratosDetalle();
         servicios = new Servicios();
 
-
     }
 
 
 
+    private void ObtenerDatos()
+    {
+        Servicios servicioAgregar = serviciosBLL.Buscar(servicios.ServicioId);
+
+        if (servicioAgregar != null)
+        {
+            servicios = servicioAgregar;
+        }
+    }
+
+    private void CalcularImporte()
+    {
+        contratosDetalle.Importe = contratosDetalle.Cantidad * servicios.Precio;
+    }
     private void RemoverFila(ContratosDetalle item)
     {
         this.contratos.ContratosDetalle.Remove(item);

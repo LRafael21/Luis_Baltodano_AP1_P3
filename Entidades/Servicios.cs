@@ -35,15 +35,7 @@ namespace Luis_Baltodano_AP1_P3.Entidades
 
 
 
-        public Servicios()
-        {
-            ServicioId = 0;
-            Plan = string.Empty;
-            Descripcion = string.Empty;
-            Precio = 0;
-            MontoFacturado = 0;
-            FechaCreacion = DateTime.Now;
-        }
+     
 
 
     }

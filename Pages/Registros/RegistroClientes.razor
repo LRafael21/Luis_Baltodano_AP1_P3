@@ -107,7 +107,6 @@
     {
         clientes.ClienteId = ClienteId;
         Buscar();
-        Nuevo();
     }
 
     public void Buscar()
@@ -139,6 +138,7 @@
 
         if (clientesBLL.Guardar(clientes))
         {
+            Nuevo();
             toastService.ShowInfo("Cliente guardado exitosamente.");
         }
         else

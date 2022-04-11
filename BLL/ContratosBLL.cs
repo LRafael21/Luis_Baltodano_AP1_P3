@@ -207,5 +207,23 @@ namespace Luis_Baltodano_AP1_P3.BLLContratos
 
         }
 
+        public List<Contratos> GetLista(Expression<Func<Contratos, bool>> criterio)
+        {
+
+            List<Contratos> lista = new List<Contratos>();
+            try
+            {
+                lista = ___contexto.Contratos.Where(criterio).ToList();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            return lista;
+
+        }
+
     }
 }

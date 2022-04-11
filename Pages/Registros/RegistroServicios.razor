@@ -131,9 +131,6 @@
     }
 
 
-    public int ClienteId { get; set; }
-    //public string filtro { get; set; }
-
 
     public void Buscar()
     {
@@ -164,6 +161,7 @@
 
         if (serviciosBLL.Guardar(servicios))
         {
+            Nuevo();
             toastService.ShowInfo("Servicio guardado exitosamente.");
         }
         else
