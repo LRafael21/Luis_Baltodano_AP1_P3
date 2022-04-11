@@ -23,9 +23,9 @@ namespace Luis_Baltodano_AP1_P3.Entidades
 
         [Required(ErrorMessage = "Es obligatorio indicar el Monto ")]
        
-        public float Monto { get; set; }
 
-
+        [ForeignKey("ContratoId")]
+        public virtual List<ContratosDetalle> ContratosDetalle { get; set; } = new List<ContratosDetalle>();
     
 
        

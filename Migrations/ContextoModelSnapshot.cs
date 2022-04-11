@@ -73,9 +73,6 @@ namespace Luis_Baltodano_AP1_P3.Migrations
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("TEXT");
 
-                    b.Property<float>("Monto")
-                        .HasColumnType("REAL");
-
                     b.HasKey("ContratoId");
 
                     b.ToTable("Contratos");
@@ -83,23 +80,33 @@ namespace Luis_Baltodano_AP1_P3.Migrations
 
             modelBuilder.Entity("Luis_Baltodano_AP1_P3.Entidades.ContratosDetalle", b =>
                 {
-                    b.Property<int>("ServicioId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<float>("Cantidad")
                         .HasColumnType("REAL");
 
+                    b.Property<int>("ContratoId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<float>("Importe")
                         .HasColumnType("REAL");
 
-                    b.Property<string>("Plan")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<float>("Precio")
+                    b.Property<float>("MontoTotal")
                         .HasColumnType("REAL");
 
-                    b.HasKey("ServicioId");
+                    b.Property<int>("ServicioId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("serviciosServicioId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContratoId");
+
+                    b.HasIndex("serviciosServicioId");
 
                     b.ToTable("ContratosDetalle");
                 });
@@ -136,16 +143,22 @@ namespace Luis_Baltodano_AP1_P3.Migrations
 
             modelBuilder.Entity("Luis_Baltodano_AP1_P3.Entidades.ContratosDetalle", b =>
                 {
-                    b.HasOne("Luis_Baltodano_AP1_P3.Entidades.Servicios", "servicios")
+                    b.HasOne("Luis_Baltodano_AP1_P3.Entidades.Contratos", null)
                         .WithMany("ContratosDetalle")
-                        .HasForeignKey("ServicioId")
+                        .HasForeignKey("ContratoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Luis_Baltodano_AP1_P3.Entidades.Servicios", "servicios")
+                        .WithMany()
+                        .HasForeignKey("serviciosServicioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("servicios");
                 });
 
-            modelBuilder.Entity("Luis_Baltodano_AP1_P3.Entidades.Servicios", b =>
+            modelBuilder.Entity("Luis_Baltodano_AP1_P3.Entidades.Contratos", b =>
                 {
                     b.Navigation("ContratosDetalle");
                 });

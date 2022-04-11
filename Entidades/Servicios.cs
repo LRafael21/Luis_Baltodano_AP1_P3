@@ -32,10 +32,7 @@ namespace Luis_Baltodano_AP1_P3.Entidades
         [Required(ErrorMessage = "Es obligatorio indicar la fecha de nacimiento")]
         public DateTime FechaCreacion { get; set; } = DateTime.Now;
 
-       
 
-        [ForeignKey("ServicioId")]
-        public virtual List<ContratosDetalle> ContratosDetalle { get; set; }  = new List<ContratosDetalle>();
 
 
         public Servicios()
@@ -46,7 +43,6 @@ namespace Luis_Baltodano_AP1_P3.Entidades
             Precio = 0;
             MontoFacturado = 0;
             FechaCreacion = DateTime.Now;
-            ContratosDetalle = new List<ContratosDetalle>();
         }
 
 

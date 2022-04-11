@@ -21,7 +21,7 @@ namespace Luis_Baltodano_AP1_P3.BLLServicios
 
         public bool Existe(int servicioId)
         {
-       
+
             bool encontrado = false;
 
             try
@@ -33,12 +33,12 @@ namespace Luis_Baltodano_AP1_P3.BLLServicios
 
                 throw;
             }
-         
+
             return encontrado;
         }
-        public  bool Existe(string descripcion)
+        public bool Existe(string descripcion)
         {
-      
+
             bool encontrado = false;
 
             try
@@ -50,13 +50,13 @@ namespace Luis_Baltodano_AP1_P3.BLLServicios
 
                 throw;
             }
-          
+
             return encontrado;
 
         }
-        private  bool Insertar(Servicios servicios)
+        private bool Insertar(Servicios servicios)
         {
-   
+
             bool paso = false;
 
             try
@@ -69,33 +69,26 @@ namespace Luis_Baltodano_AP1_P3.BLLServicios
 
                 throw;
             }
-          
+
             return paso;
 
         }
         private bool Modificar(Servicios servicios)
         {
-         
+
             bool paso = false;
             try
             {
-                __contexto.Database.ExecuteSqlRaw($"Delete FROM ContratosDetalle where ServicioId={servicios.ServicioId}");
-
-                foreach (var anterior in servicios.ContratosDetalle)
-                {
-                    __contexto.Entry(anterior).State = EntityState.Added;
-                }
-
                 __contexto.Entry(servicios).State = EntityState.Modified;
-
                 paso = __contexto.SaveChanges() > 0;
+
             }
             catch (Exception)
             {
 
                 throw;
             }
-    
+
             return paso;
 
 
@@ -105,19 +98,19 @@ namespace Luis_Baltodano_AP1_P3.BLLServicios
         {
             if (!Existe(servicios.ServicioId))
                 return Insertar(servicios);
-                else
+            else
                 return Modificar(servicios);
         }
 
-        public  bool Eliminar(int servicioId)
+        public bool Eliminar(int servicioId)
         {
 
-        
+
             bool paso = false;
             try
             {
                 var servicios = __contexto.Servicios.Find(servicioId);
-                if(servicios != null)
+                if (servicios != null)
                 {
                     __contexto.Servicios.Remove(servicios);
                     paso = __contexto.SaveChanges() > 0;
@@ -128,7 +121,7 @@ namespace Luis_Baltodano_AP1_P3.BLLServicios
 
                 throw;
             }
-          
+
             return paso;
 
         }
@@ -137,12 +130,11 @@ namespace Luis_Baltodano_AP1_P3.BLLServicios
         {
 
 
- 
+
             Servicios? servicios;
             try
             {
-                servicios = __contexto.Servicios.Include(x => x.ContratosDetalle)
-                .Where(p => p.ServicioId == servicioId).SingleOrDefault();
+                servicios = __contexto.Servicios.Find(servicioId);
             }
             catch (Exception)
             {
@@ -183,12 +175,8 @@ namespace Luis_Baltodano_AP1_P3.BLLServicios
             List<Servicios> lista = new List<Servicios>();
             try
             {
+                lista = __contexto.Servicios.Where(criterio).ToList();
 
-                lista = __contexto.Servicios
-               .Include(x => x.ContratosDetalle)
-               .Where(criterio)
-               .AsNoTracking()
-               .ToList();
             }
             catch (Exception)
             {

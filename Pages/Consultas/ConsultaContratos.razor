@@ -62,7 +62,7 @@
             {
                 <tr>
                     <td>@item.Comentarios</td>
-                    <td>@item.Monto</td>
+                   @*  <td>@item.Monto</td> *@
                     <td>@item.Fecha</td> @* <----Fecha *@
                      <td><a class="btn btn-sm btn-outline-primary oi oi-eye" href="RegistroClientes/@item.ClienteId">Ver</a></td>
                 </tr>
@@ -103,10 +103,10 @@
                 case "1":
                     lista = contratosBLL.GetList(p => p.Comentarios.ToLower().Contains(Criterio.ToLower()));
                     break;
-                case "2":
+               @*  case "2":
                     lista = contratosBLL.GetList(p => p.Monto == int.Parse(Criterio));
                     break;
-
+ *@
             }
         }
 

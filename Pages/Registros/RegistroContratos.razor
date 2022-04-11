@@ -42,7 +42,7 @@
 
                 <div class="form-group col">
                     <label><b> ClienteId</b></label>
-                    <InputSelect @bind-Value="ClienteId" class="form-select ">
+                    <InputSelect @bind-Value="contratos.ClienteId" class="form-select ">
                         <option value="0" disabled selected> Seleccione un Cliente</option>
 
                         @foreach (var item in lista)
@@ -81,7 +81,7 @@
 
                                 <div class="input-group">
 
-                                    <select @bind="SeleccionaServicio" class="form-select" @onfocusout="ObtenerDatos">
+                                    <select @bind="servicios.ServicioId" class="form-select" @onfocusout="ObtenerDatos">
                                         <option value="0" disabled selected> Seleccione un Servicio</option>
 
                                         @foreach (var item in lista2)
@@ -91,12 +91,12 @@
                                     </select>
 
 
-                                    <InputNumber class="form-control" @bind-Value="Cantidad"
+                                    <InputNumber class="form-control" @bind-Value="contratosDetalle.Cantidad"
                                         @onfocusout="CalcularImporte" />
 
-                                    <InputNumber readonly class="form-control" @bind-Value="Precio" />
+                                    <InputNumber readonly class="form-control" @bind-Value="servicios.Precio" />
 
-                                    <InputNumber readonly class="form-control" @bind-Value="Importe" />
+                                    <InputNumber readonly class="form-control" @bind-Value="contratosDetalle.Importe" />
 
 
 
@@ -123,19 +123,19 @@
 
                             <tbody>
 
-                                @foreach (var item in servicios.ContratosDetalle)
+                                @foreach (var detalle in contratos.ContratosDetalle)
 
                                 {
 
                                     <tr>
-                                        <td>@item.ServicioId</td>
-                                        <td>@item.Plan</td>
-                                        <td>@item.Cantidad</td>
-                                        <td>RD$@item.Precio</td>
-                                        <td>RD$@item.Importe</td>
+                                        <td>@detalle.servicios.ServicioId</td>
+                                        <td>@detalle.servicios.Plan</td>
+                                        <td>@detalle.Cantidad</td>
+                                        <td>RD$@detalle.servicios.Precio</td>
+                                        <td>RD$@detalle.Importe</td>
 
                                         <td><span class="btn btn-sm btn-outline-primary oi oi-ban" href="#"
-                                            @onclick="@(() => RemoverFila(item))"> Remover</span> </td>
+                                            @onclick="@(() => RemoverFila(detalle))"> Remover</span> </td>
                                     </tr>
                                 }
                                 <br>
@@ -143,13 +143,13 @@
 
                             </tbody>
 
-                            @foreach (var items in servicios.ContratosDetalle)
+                            @foreach (var items in contratos.ContratosDetalle)
                             {
-                                contratos.Monto = items.Importe;
+                                contratosDetalle.MontoTotal = items.Importe;
                             }
                             <label><b>Monto Total:</b></label>
-                            <InputNumber readonly class="form-control" @bind-Value="contratos.Monto" />
-                            <ValidationMessage For="@(() => contratos.Monto)" />
+                            <InputNumber readonly class="form-control" @bind-Value=" contratosDetalle.MontoTotal" />
+                            <ValidationMessage For="@(() =>  contratosDetalle.MontoTotal)" />
                         </table>
                     </div>
                 </div>
@@ -172,7 +172,6 @@
 @code {
 
 
-
     [Inject]
     public ContratosBLL contratosBLL { get; set; }
     [Inject]
@@ -183,49 +182,42 @@
     public Contratos contratos { get; set; } = new Contratos();
     public Servicios servicios { get; set; } = new Servicios();
     public ContratosDetalle contratosDetalle { get; set; } = new ContratosDetalle();
-    public Clientes clientes { get; set; } = new Clientes();
+
     public List<Clientes> lista { get; set; } = new List<Clientes>();
 
     public List<Servicios> lista2 { get; set; } = new List<Servicios>();
 
-    public ContratosDetalle CDetalle = new ContratosDetalle();
 
     protected override void OnInitialized()
     {
         contratos.ContratoId = ContratoId;
-        servicios.ServicioId = ServicioId;
+       // servicios.ServicioId = ServicioId;
         lista = clientesBLL.GetList(t => true);
         lista2 = serviciosBLL.GetList(t => true);
         Buscar();
-        Nuevo();
+        
     }
     public int ClienteId { get; set; }
 
     public int ContratoId { get; set; }
 
-    public float Cantidad { get; set; }
-    public float Precio { get; set; }
+  //  public int ServicioId { get; set; }
 
-    public float Importe { get; set; }
-    public int ServicioId { get; set; }
-    public float contar;
-
-    public string Plan;
-    public int SeleccionaServicio { get; set; }
+   
 
     private void ObtenerDatos()
     {
-        Servicios datosPrecio = serviciosBLL.Buscar(SeleccionaServicio);
+        Servicios servicioAgregar = serviciosBLL.Buscar(servicios.ServicioId);
 
-        if (datosPrecio != null)
+        if (servicioAgregar != null)
         {
-            Precio = datosPrecio.Precio;
+            servicios = servicioAgregar;
         }
     }
 
     private void CalcularImporte()
     {
-        Importe = Cantidad * Precio;
+        contratosDetalle.Importe = contratosDetalle.Cantidad * servicios.Precio;
     }
 
 
@@ -287,15 +279,12 @@
 
     private void AgregarDetalle()
     {
-        Servicios ADDServicios = serviciosBLL.Buscar(SeleccionaServicio);
+        Servicios servicioEncontrado = serviciosBLL.Buscar(servicios.ServicioId);
+        this.contratosDetalle.servicios = servicioEncontrado;
+        this.contratos.ContratosDetalle.Add(contratosDetalle);
+        this.contratosDetalle = new ContratosDetalle();
+        servicios = new Servicios();
 
-        this.servicios.ContratosDetalle.Add(new ContratosDetalle(
-
-        ServicioId = SeleccionaServicio,
-        Plan = ADDServicios.Plan,
-        Cantidad, Precio, Importe
-
-        ));
 
     }
 
@@ -303,18 +292,8 @@
 
     private void RemoverFila(ContratosDetalle item)
     {
-        this.servicios.ContratosDetalle.Remove(item);
+        this.contratos.ContratosDetalle.Remove(item);
     }
 
-    private void AgregarDatosDelServicio()
-    {
-        Servicios ADDServicios = serviciosBLL.Buscar(servicios.ServicioId);
-
-        if (ADDServicios != null)
-        {
-            Precio = ADDServicios.Precio;
-
-        }
-    }
 
 }

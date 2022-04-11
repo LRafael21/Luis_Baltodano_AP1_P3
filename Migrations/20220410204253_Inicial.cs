@@ -35,8 +35,7 @@ namespace Luis_Baltodano_AP1_P3.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Fecha = table.Column<DateTime>(type: "TEXT", nullable: false),
                     ClienteId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Comentarios = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: false),
-                    Monto = table.Column<float>(type: "REAL", nullable: false)
+                    Comentarios = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -64,22 +63,41 @@ namespace Luis_Baltodano_AP1_P3.Migrations
                 name: "ContratosDetalle",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ContratoId = table.Column<int>(type: "INTEGER", nullable: false),
                     ServicioId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Plan = table.Column<string>(type: "TEXT", nullable: false),
                     Cantidad = table.Column<float>(type: "REAL", nullable: false),
-                    Precio = table.Column<float>(type: "REAL", nullable: false),
-                    Importe = table.Column<float>(type: "REAL", nullable: false)
+                    Importe = table.Column<float>(type: "REAL", nullable: false),
+                    MontoTotal = table.Column<float>(type: "REAL", nullable: false),
+                    serviciosServicioId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ContratosDetalle", x => x.ServicioId);
+                    table.PrimaryKey("PK_ContratosDetalle", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ContratosDetalle_Servicios_ServicioId",
-                        column: x => x.ServicioId,
+                        name: "FK_ContratosDetalle_Contratos_ContratoId",
+                        column: x => x.ContratoId,
+                        principalTable: "Contratos",
+                        principalColumn: "ContratoId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ContratosDetalle_Servicios_serviciosServicioId",
+                        column: x => x.serviciosServicioId,
                         principalTable: "Servicios",
                         principalColumn: "ServicioId",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ContratosDetalle_ContratoId",
+                table: "ContratosDetalle",
+                column: "ContratoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ContratosDetalle_serviciosServicioId",
+                table: "ContratosDetalle",
+                column: "serviciosServicioId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -88,10 +106,10 @@ namespace Luis_Baltodano_AP1_P3.Migrations
                 name: "Clientes");
 
             migrationBuilder.DropTable(
-                name: "Contratos");
+                name: "ContratosDetalle");
 
             migrationBuilder.DropTable(
-                name: "ContratosDetalle");
+                name: "Contratos");
 
             migrationBuilder.DropTable(
                 name: "Servicios");
