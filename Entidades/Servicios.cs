@@ -13,7 +13,7 @@ namespace Luis_Baltodano_AP1_P3.Entidades
 
         [Required(ErrorMessage = "Es obligatorio indicar el Plan")]
 
-        public Planes Plan { get; set; } = new Planes();
+        public Planes? Plan { get; set; } = new Planes();
 
         [Required(ErrorMessage = "Es obligatorio indicar la Descripcion")]
         [MinLength(2, ErrorMessage = "La descripcion debe tener al menos {0} caractéres")]

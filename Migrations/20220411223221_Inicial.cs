@@ -18,8 +18,8 @@ namespace Luis_Baltodano_AP1_P3.Migrations
                     Nombre = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     Apellido = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     Direccion = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    NumeroCedula = table.Column<string>(type: "TEXT", maxLength: 11, nullable: false),
-                    NumeroTelefono = table.Column<string>(type: "TEXT", maxLength: 11, nullable: false),
+                    NumeroCedula = table.Column<string>(type: "TEXT", maxLength: 14, nullable: false),
+                    NumeroTelefono = table.Column<string>(type: "TEXT", maxLength: 14, nullable: false),
                     FechaNacimiento = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>

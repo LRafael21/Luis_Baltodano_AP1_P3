@@ -56,6 +56,7 @@
                                 <option value="@plan.Id.ToString()">@plan.Descripcion</option>
                             }
                         </InputSelect>
+                        <ValidationMessage For="@(() => servicios.Plan)" />
                     </div>
 
                     <div class="form-group">
@@ -121,16 +122,22 @@
     public List<Planes> listadePlanes { get; set; } = new List<Planes>();
 
     public Servicios servicios { get; set; } = new Servicios();
+    public Planes planes { get; set; } = new Planes();
 
     string cadena;
-protected override void OnInitialized()
+    public List<Servicios> lista2 { get; set; } = new List<Servicios>();
+
+    protected override void OnInitialized()
     {
         servicios.ServicioId = ServicioId;
         listadePlanes = planesBLL.GetList();
+        lista2 = serviciosBLL.GetList(t => true);
+        listadePlanes = planesBLL.GetList();
         Buscar();
 
-    }
 
+
+    }
 
 
     public void Buscar()
@@ -138,9 +145,12 @@ protected override void OnInitialized()
         if (this.servicios.ServicioId > 0)
         {
             Servicios encontrado = serviciosBLL.Buscar(this.servicios.ServicioId);
+
             if (encontrado != null)
             {
                 this.servicios = encontrado;
+
+
                 toastService.ShowSuccess("Servicio encontrado.");
             }
             else

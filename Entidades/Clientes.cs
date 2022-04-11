@@ -27,9 +27,6 @@ namespace Luis_Baltodano_AP1_P3.Entidades
         [Required(ErrorMessage = "Es obligatorio indicar la direccion")]
         [MinLength(2, ErrorMessage = "La direccion debe tener al menos {1} caractéres")]
         [MaxLength(100, ErrorMessage = "La direccion no debe pasar de {1} caracterés")]
-
-
-
         public string Direccion { get; set; }
 
         [Required(ErrorMessage = "Es obligatorio indicar el Numero de Cedula")]

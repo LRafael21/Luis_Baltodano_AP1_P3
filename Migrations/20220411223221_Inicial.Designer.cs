@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Luis_Baltodano_AP1_P3.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20220411062222_Inicial")]
+    [Migration("20220411223221_Inicial")]
     partial class Inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,12 +45,12 @@ namespace Luis_Baltodano_AP1_P3.Migrations
 
                     b.Property<string>("NumeroCedula")
                         .IsRequired()
-                        .HasMaxLength(11)
+                        .HasMaxLength(14)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("NumeroTelefono")
                         .IsRequired()
-                        .HasMaxLength(11)
+                        .HasMaxLength(14)
                         .HasColumnType("TEXT");
 
                     b.HasKey("ClienteId");

@@ -183,6 +183,7 @@
     public ServiciosBLL serviciosBLL { get; set; }
 
     public Contratos contratos { get; set; } = new Contratos();
+       public Clientes clientes { get; set; } = new Clientes();
     public Servicios servicios { get; set; } = new Servicios();
     public ContratosDetalle contratosDetalle { get; set; } = new ContratosDetalle();
 
@@ -228,7 +229,7 @@
 
     public void Guardar()
     {
-        if (ContratoValido())
+        if (ContratoValido() && ContratoInvalido())
         {
 
 
@@ -280,6 +281,33 @@
         }
 
         return valido;
+
+      
+    }
+
+      private bool ContratoInvalido()
+    {
+        bool Valido = true;
+           try
+        {
+            var contratoRepetido = clientesBLL.Buscar(this.clientes.ClienteId);
+            if (contratoRepetido != null && contratoRepetido.ClienteId != this.contratos.ContratoId)
+            {
+                Valido = false;
+
+                toastService.ShowError("Cliente ya registrado", "Error" );
+
+            }
+
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+
+        return Valido;
+
     }
 
 

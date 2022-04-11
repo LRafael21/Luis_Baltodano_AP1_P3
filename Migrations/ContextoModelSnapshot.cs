@@ -43,12 +43,12 @@ namespace Luis_Baltodano_AP1_P3.Migrations
 
                     b.Property<string>("NumeroCedula")
                         .IsRequired()
-                        .HasMaxLength(11)
+                        .HasMaxLength(14)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("NumeroTelefono")
                         .IsRequired()
-                        .HasMaxLength(11)
+                        .HasMaxLength(14)
                         .HasColumnType("TEXT");
 
                     b.HasKey("ClienteId");
